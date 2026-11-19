@@ -1,0 +1,11 @@
+{
+  "id": "io.github.frank9306.nshmicrointeractions",
+  "name": "NSH Micro Interactions",
+  "short_name": "NSH Micro Interactions",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": []
+}

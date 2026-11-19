@@ -1,0 +1,11 @@
+NSH Micro Interactions is an independent Native Shell port of public Amicro examples.
+
+Amicro — Micro-transitions
+Copyright (c) 2026 SYED SUBHAN UDDIN
+https://github.com/Subhan-code/Amicro--Micro-transitions-
+Upstream revision: fa5f8ffbe39537a8db191806066b8773c47c82e9
+The complete upstream MIT license is included in LICENSE.
+
+Lucide vectors are derived from lucide-static 0.546.0. See LICENSE-LUCIDE.txt.
+Native Shell is licensed under Apache-2.0. See LICENSE-NSH.txt.
+The browser distribution also includes the bundled runtime's LICENSES.txt.
