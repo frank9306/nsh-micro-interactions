@@ -13,10 +13,13 @@ import { specialLoaderNames } from "./ports/LoaderSpecial";
 import { ditherNames } from "./ports/DitherMotion";
 import { monoMoreNames } from "./ports/MonoMore";
 import { studioNames } from "./ports/AiStudio";
+import { primitiveNames } from "./ports/PrimitiveMotion";
+import { physicsNames } from "./ports/PhysicsMotion";
+import { uiMoreNames } from "./ports/UiMore";
 import type { Entry } from "./model";
 
 export type Port = "button" | "card" | "depth" | "loader" | "specialLoader" | "text" | "textEffect"
-  | "ui" | "chart" | "monoMore" | "dither" | "ai" | "aiStudio" | "shape" | "actionMorph";
+  | "ui" | "uiMore" | "chart" | "monoMore" | "dither" | "ai" | "aiStudio" | "shape" | "shapeStudio" | "actionMorph" | "primitive" | "physics";
 export function portFor(entry: Entry): Port | undefined {
   if (entry.family === "buttons" && entry.effect && entry.icons?.length) return "button";
   if (Object.hasOwn(spreadStyles, entry.id)) return "card";
@@ -33,5 +36,9 @@ export function portFor(entry: Entry): Port | undefined {
   if (ditherNames.has(entry.id)) return "dither";
   if (aiNames.has(entry.id)) return "ai";
   if (studioNames.has(entry.id)) return "aiStudio";
+  if (primitiveNames.has(entry.id)) return "primitive";
+  if (physicsNames.has(entry.id)) return "physics";
+  if (uiMoreNames.has(entry.id)) return "uiMore";
+  if (entry.id === "morphing-shapes-studio") return "shapeStudio";
 }
 export { inventory };

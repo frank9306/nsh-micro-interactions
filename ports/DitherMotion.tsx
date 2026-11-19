@@ -7,7 +7,7 @@ const types: Record<string, string> = {
   "dither-growth": "growth", "dither-revenue": "revenue", "dither-gauge": "gauge",
   "dither-traffic": "traffic", "dither-funnel": "funnel", "dither-storage": "storage",
   "dither-heatmap": "heatmap", "dither-uptime": "uptime",
-  "dither-donut-chart": "donut", "dither-growth-chart": "growth", "activity-heatmap": "heatmap",
+  "dither-donut-chart": "donut", "dither-growth-chart": "growth", "activity-heatmap": "heatmap", "uptime-chart": "uptime",
 };
 export const ditherNames = new Set(Object.keys(types));
 const base = [33, 48, 37, 62, 51, 73, 59, 86, 79, 94];

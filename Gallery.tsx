@@ -19,6 +19,10 @@ import { LoaderSpecial } from "./ports/LoaderSpecial";
 import { DitherMotion } from "./ports/DitherMotion";
 import { MonoMore } from "./ports/MonoMore";
 import { AiStudio } from "./ports/AiStudio";
+import { PrimitiveMotion } from "./ports/PrimitiveMotion";
+import { PhysicsMotion } from "./ports/PhysicsMotion";
+import { UiMore } from "./ports/UiMore";
+import { ShapeStudio } from "./ports/ShapeStudio";
 
 const ready = inventory.filter(entry => portFor(entry));
 const deploy = ready.find(entry => entry.id === "btn-3")!;
@@ -30,6 +34,8 @@ const portFile = {
   text: "TextMotion", textEffect: "TextEffects", ui: "UiMotion", chart: "ChartMotion", ai: "AiMotion", shape: "ShapeMotion",
   actionMorph: "ActionMorph",
   specialLoader: "LoaderSpecial", dither: "DitherMotion", monoMore: "MonoMore", aiStudio: "AiStudio",
+  primitive: "PrimitiveMotion", physics: "PhysicsMotion",
+  uiMore: "UiMore", shapeStudio: "ShapeStudio",
 };
 type Tone = "text" | "muted" | "accent" | "onAccent";
 
@@ -113,7 +119,7 @@ export function Gallery(props: { initialLanguage: Language }) {
         style={iconStyle()} class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
         <Glyph name="github" color={ink().text} />
       </Link>
-      <Menu popupStyle={{ minWidth: 136, padding: 4, borderRadius: 12, borderWidth: 1,
+      <Menu align="end" offset={7} popupStyle={{ minWidth: 136, padding: 4, borderRadius: 12, borderWidth: 1,
         borderColor: ink().border, backgroundColor: ink().panel }}
         trigger={<View accessibilityLabel={languageLabel()} tooltip={languageLabel()} style={iconStyle()}
           class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
@@ -170,6 +176,10 @@ export function Gallery(props: { initialLanguage: Language }) {
         <If when={port() === "dither"}><DitherMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
         <If when={port() === "ai"}><AiMotion id={p.entry.id} ink={ink()} language={language()} /></If>
         <If when={port() === "aiStudio"}><AiStudio id={p.entry.id} ink={ink()} language={language()} /></If>
+        <If when={port() === "primitive"}><PrimitiveMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "physics"}><PhysicsMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "uiMore"}><UiMore id={p.entry.id} ink={ink()} language={language()} /></If>
+        <If when={port() === "shapeStudio"}><ShapeStudio ink={ink()} language={language()} /></If>
         <If when={!port()}><Type tone="muted">{t().pending}</Type></If>
       </View>
       <View style={horizontal}>

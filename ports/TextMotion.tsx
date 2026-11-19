@@ -31,6 +31,8 @@ const presets: Record<string, Reveal> = {
   "fade-in": { part: "whole" },
   "fade-up": { part: "whole", y: 20 },
   "fade-down": { part: "whole", y: -20 },
+  "slide-left": { part: "whole", x: 30 },
+  "slide-right": { part: "whole", x: -30 },
   "character-stagger": { part: "letter", y: 17 },
   "word-reveal": { part: "word", y: 18 },
   "scale-in": { part: "whole", scale: 0.92 },

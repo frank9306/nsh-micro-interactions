@@ -1,4 +1,9 @@
 import { expect, open, test } from "nsh/test";
+import { inventory, portFor } from "./catalog";
+
+test("every pinned catalog entry has a runnable NSH port", () => {
+  expect(inventory.filter(entry => !portFor(entry)).map(entry => entry.id)).toEqual([]);
+});
 
 test("switches language and shows a real Amicro button preview", async () => {
   const app = await open("./App.tsx");

@@ -1,0 +1,14 @@
+const host=globalThis.__nsh_browser_realm.modules;
+let e0=host.get("nsh/base")["Button"];export{e0 as "Button"};
+let e1=host.get("nsh/base")["Link"];export{e1 as "Link"};
+let e2=host.get("nsh/base")["Menu"];export{e2 as "Menu"};
+let e3=host.get("nsh/base")["MenuItem"];export{e3 as "MenuItem"};
+let e4=host.get("nsh/base")["Popover"];export{e4 as "Popover"};
+let e5=host.get("nsh/base")["Progress"];export{e5 as "Progress"};
+let e6=host.get("nsh/base")["Select"];export{e6 as "Select"};
+let e7=host.get("nsh/base")["Slider"];export{e7 as "Slider"};
+let e8=host.get("nsh/base")["Submenu"];export{e8 as "Submenu"};
+let e9=host.get("nsh/base")["Switch"];export{e9 as "Switch"};
+let e10=host.get("nsh/base")["Tab"];export{e10 as "Tab"};
+let e11=host.get("nsh/base")["Tabs"];export{e11 as "Tabs"};
+globalThis.__nsh_browser_realm.watch(()=>{e0=host.get("nsh/base")["Button"];e1=host.get("nsh/base")["Link"];e2=host.get("nsh/base")["Menu"];e3=host.get("nsh/base")["MenuItem"];e4=host.get("nsh/base")["Popover"];e5=host.get("nsh/base")["Progress"];e6=host.get("nsh/base")["Select"];e7=host.get("nsh/base")["Slider"];e8=host.get("nsh/base")["Submenu"];e9=host.get("nsh/base")["Switch"];e10=host.get("nsh/base")["Tab"];e11=host.get("nsh/base")["Tabs"];});

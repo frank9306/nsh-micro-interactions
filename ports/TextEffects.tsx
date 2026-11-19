@@ -2,7 +2,7 @@ import { Button } from "nsh/base";
 import { Canvas, Text, View, cleanup, reduceMotion, signal } from "nsh";
 import type { Ink, Language } from "../model";
 
-export const effectNames = new Set(["blur-text", "blur-up-char", "blur-up-word", "dia-text-reveal", "reveal-text",
+export const effectNames = new Set(["blur-text", "blur-up-char", "blur-up-word", "dia-text-reveal", "reveal-text", "text-reveal",
   "shimmer-text", "skew-x-char", "tracking-in-text", "tracking-out-text", "typewriter-text"]);
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 const ease = (n: number) => 1 - Math.pow(1 - clamp(n), 3);
@@ -12,7 +12,7 @@ export function TextEffects(p: { id: string; ink: Ink; language: Language }) {
   const time = signal(1700);
   const zh = () => p.language === "zh";
   const wording = () => zh() ? "让文字 动起来" : "Motion in focus";
-  const needsCanvas = ["dia-text-reveal", "shimmer-text", "reveal-text"].includes(p.id);
+  const needsCanvas = ["dia-text-reveal", "shimmer-text", "reveal-text", "text-reveal"].includes(p.id);
   let timer: ReturnType<typeof setInterval> | undefined;
   function stop() {
     if (timer !== undefined) clearInterval(timer);
