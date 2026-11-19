@@ -1,6 +1,6 @@
 # NSH 微交互组件库
 
-[English](README.md) · [在线交互展台](https://frank9306.github.io/nsh-micro-interactions/)
+[English](README.md) · [在线交互展台](https://frank9306.github.io/nsh-micro-interactions/zh/)
 
 使用 Native Shell 移植 Amicro 的公开微交互组件。展台支持简体中文、英文和深浅色，目录可以搜索，每项都可以跳转查看上游来源。
 
@@ -17,6 +17,8 @@ nsh package --target web --run
 ```
 
 运行 `python scripts/build-pages.py` 更新 GitHub Pages 的静态文件。更新目录时，将 Amicro 检出到 [NOTICE.txt](NOTICE.txt) 所列版本，再运行 `python scripts/catalog.py /path/to/amicro`。
+
+运行 `node scripts/loaders.mjs /path/to/amicro /path/to/typescript/lib/typescript.js`（TypeScript 5.9.3）生成加载动画数据。编译器把能表达的 JSX 转为 NSH 视图和时间轴数据，其他动画保留在目录中等待手工移植。
 
 ## 版权
 

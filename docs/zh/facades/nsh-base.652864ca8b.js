@@ -1,0 +1,11 @@
+const host=globalThis.__nsh_browser_realm.modules;
+let e0=host.get("nsh/base")["Button"];export{e0 as "Button"};
+let e1=host.get("nsh/base")["Link"];export{e1 as "Link"};
+let e2=host.get("nsh/base")["Menu"];export{e2 as "Menu"};
+let e3=host.get("nsh/base")["MenuItem"];export{e3 as "MenuItem"};
+let e4=host.get("nsh/base")["Select"];export{e4 as "Select"};
+let e5=host.get("nsh/base")["Slider"];export{e5 as "Slider"};
+let e6=host.get("nsh/base")["Switch"];export{e6 as "Switch"};
+let e7=host.get("nsh/base")["Tab"];export{e7 as "Tab"};
+let e8=host.get("nsh/base")["Tabs"];export{e8 as "Tabs"};
+globalThis.__nsh_browser_realm.watch(()=>{e0=host.get("nsh/base")["Button"];e1=host.get("nsh/base")["Link"];e2=host.get("nsh/base")["Menu"];e3=host.get("nsh/base")["MenuItem"];e4=host.get("nsh/base")["Select"];e5=host.get("nsh/base")["Slider"];e6=host.get("nsh/base")["Switch"];e7=host.get("nsh/base")["Tab"];e8=host.get("nsh/base")["Tabs"];});

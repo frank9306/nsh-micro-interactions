@@ -10,3 +10,10 @@ test("switches language and shows a real Amicro button preview", async () => {
   await app.waitFor("已触发交互");
   expect(app.shows("组件目录")).toBe(true);
 });
+
+test("opens in Chinese from the localized entry", async () => {
+  const app = await open("./App.zh.tsx");
+  await app.waitFor("让组件动起来");
+  await app.press("label:English");
+  await app.waitFor("Motion you can touch.");
+});

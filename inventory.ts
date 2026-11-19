@@ -36,7 +36,7 @@ export const inventory: Entry[] = [
     "id": "ui-ab-tabs",
     "name": "A / B Segmented Tabs",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/ActionsUiKit.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -50,14 +50,14 @@ export const inventory: Entry[] = [
     "id": "ui-context-menu",
     "name": "Actions Context Menu",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/ActionsUiKit.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
     "id": "ui-save-pill",
     "name": "Bookmark Save Pill",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/StatusPreviewTrios.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -85,7 +85,7 @@ export const inventory: Entry[] = [
     "id": "ui-category-select",
     "name": "Category Dropdown",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/ControlsUiKit.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -113,7 +113,7 @@ export const inventory: Entry[] = [
     "id": "ui-date-position",
     "name": "Date Position Selector",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/ControlsUiKit.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -218,7 +218,7 @@ export const inventory: Entry[] = [
     "id": "ui-light-dark-toggle",
     "name": "Light / Dark Mode Toggle",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/ControlsUiKit.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -414,7 +414,7 @@ export const inventory: Entry[] = [
     "id": "ui-segmented-step-bar",
     "name": "Segmented Step Bar",
     "family": "animations",
-    "source": "src/data/cssAnimationsData.ts",
+    "source": "src/components/css-animations/ui-interactions/NavigationTrios.tsx",
     "preview": "https://amicro.vercel.app/animations"
   },
   {
@@ -1013,80 +1013,80 @@ export const inventory: Entry[] = [
     "preview": "https://amicro.vercel.app/carousels/card-cover-flow"
   },
   {
-    "id": "dither-device",
-    "name": "Dither Device",
-    "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-device",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "dither-donut",
-    "name": "Dither Donut",
-    "family": "dither-charts",
-    "source": "src/components/dither-charts/DitherDonutChart.tsx",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-donut"
-  },
-  {
-    "id": "dither-funnel",
-    "name": "Dither Funnel",
-    "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-funnel",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "dither-gauge",
-    "name": "Dither Gauge",
-    "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-gauge",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "dither-growth",
-    "name": "Dither Growth",
-    "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-growth",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
     "id": "dither-heatmap",
-    "name": "Dither Heatmap",
+    "name": "Activity Dither Heatmap",
     "family": "dither-charts",
     "preview": "https://amicro.vercel.app/dither-charts/dither-heatmap",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "dither-revenue",
-    "name": "Dither Revenue",
+    "id": "dither-funnel",
+    "name": "Conversion Funnel",
     "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-revenue",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-funnel",
     "source": "src/data/componentEntries.ts"
   },
   {
+    "id": "dither-device",
+    "name": "Device Usage Donut",
+    "family": "dither-charts",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-device",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "dither-growth",
+    "name": "Dither Area Growth",
+    "family": "dither-charts",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-growth",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "dither-donut",
+    "name": "Dither Donut Graph",
+    "family": "dither-charts",
+    "source": "src/components/dither-charts/DitherDonutChart.tsx",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-donut"
+  },
+  {
     "id": "dither-stacked",
-    "name": "Dither Stacked",
+    "name": "Dither Stacked Bar",
     "family": "dither-charts",
     "preview": "https://amicro.vercel.app/dither-charts/dither-stacked",
     "source": "src/data/componentEntries.ts"
   },
   {
+    "id": "dither-revenue",
+    "name": "Revenue Spline Line",
+    "family": "dither-charts",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-revenue",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "dither-gauge",
+    "name": "Server CPU Gauge",
+    "family": "dither-charts",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-gauge",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
     "id": "dither-storage",
-    "name": "Dither Storage",
+    "name": "Storage Capacity Bar",
     "family": "dither-charts",
     "preview": "https://amicro.vercel.app/dither-charts/dither-storage",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "dither-traffic",
-    "name": "Dither Traffic",
+    "id": "dither-uptime",
+    "name": "System Uptime Matrix",
     "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-traffic",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-uptime",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "dither-uptime",
-    "name": "Dither Uptime",
+    "id": "dither-traffic",
+    "name": "Traffic Scatter Bubbles",
     "family": "dither-charts",
-    "preview": "https://amicro.vercel.app/dither-charts/dither-uptime",
+    "preview": "https://amicro.vercel.app/dither-charts/dither-traffic",
     "source": "src/data/componentEntries.ts"
   },
   {
@@ -2022,214 +2022,214 @@ export const inventory: Entry[] = [
     "source": "registry/ui/loading/zig-zag-pulse.tsx"
   },
   {
-    "id": "mono-activity-blue",
-    "name": "Mono Activity Blue",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-activity-blue",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
     "id": "mono-activity-green",
-    "name": "Mono Activity Green",
+    "name": "Emerald Activity Heatmap",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-activity-green",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-activity-purple",
-    "name": "Mono Activity Purple",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-activity-purple",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-area",
-    "name": "Mono Rounded Area",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-area",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-bar",
-    "name": "Mono Rounded Bar",
-    "family": "mono-charts",
-    "source": "src/components/mono-charts/MonoRoundedBarChart.tsx",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bar"
-  },
-  {
-    "id": "mono-rounded-bubble",
-    "name": "Mono Rounded Bubble",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bubble",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-bullet",
-    "name": "Mono Rounded Bullet",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bullet",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-candlestick",
-    "name": "Mono Rounded Candlestick",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-candlestick",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-composed",
-    "name": "Mono Rounded Composed",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-composed",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-donut",
-    "name": "Mono Rounded Donut",
-    "family": "mono-charts",
-    "source": "src/components/mono-charts/MonoRoundedDonutChart.tsx",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-donut"
-  },
-  {
-    "id": "mono-rounded-funnel",
-    "name": "Mono Rounded Funnel",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-funnel",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-gauge-arc",
-    "name": "Mono Rounded Gauge Arc",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-gauge-arc",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-heatmap",
-    "name": "Mono Rounded Heatmap",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-heatmap",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-kpi",
-    "name": "Mono Rounded Kpi",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-kpi",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-line",
-    "name": "Mono Rounded Line",
-    "family": "mono-charts",
-    "source": "src/components/mono-charts/MonoRoundedLineChart.tsx",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-line"
+    "source": "src/components/mono-charts/MonoActivityHeatmap.tsx"
   },
   {
     "id": "mono-rounded-meter",
-    "name": "Mono Rounded Meter",
+    "name": "Mono Arc Meter Gauge",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-meter",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "mono-rounded-polar",
-    "name": "Mono Rounded Polar",
+    "id": "mono-rounded-bubble",
+    "name": "Mono Bubble Clusters",
     "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-polar",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-pyramid",
-    "name": "Mono Rounded Pyramid",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-pyramid",
-    "source": "src/data/componentEntries.ts"
-  },
-  {
-    "id": "mono-rounded-radar",
-    "name": "Mono Rounded Radar",
-    "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-radar",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bubble",
     "source": "src/data/componentEntries.ts"
   },
   {
     "id": "mono-rounded-radial-gauge",
-    "name": "Mono Rounded Radial Gauge",
+    "name": "Mono Concentric Radial Rings",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-radial-gauge",
     "source": "src/data/componentEntries.ts"
   },
   {
+    "id": "mono-rounded-area",
+    "name": "Mono Curved Wave Area",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-area",
+    "source": "src/components/mono-charts/MonoRoundedAreaChart.tsx"
+  },
+  {
+    "id": "mono-rounded-heatmap",
+    "name": "Mono Dot Matrix Heatmap",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-heatmap",
+    "source": "src/components/mono-charts/MonoRoundedHeatmapChart.tsx"
+  },
+  {
+    "id": "mono-rounded-candlestick",
+    "name": "Mono Financial Candlesticks",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-candlestick",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-rounded-sankey",
+    "name": "Mono Flow Sankey Channels",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-sankey",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-rounded-stream",
+    "name": "Mono Fluid Stream Wave",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-stream",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-rounded-composed",
+    "name": "Mono Hybrid Spline + Bar",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-composed",
+    "source": "src/components/mono-charts/MonoRoundedComposedChart.tsx"
+  },
+  {
+    "id": "mono-rounded-bullet",
+    "name": "Mono Performance Bullet Target",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bullet",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-rounded-polar",
+    "name": "Mono Polar Radial Pillars",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-polar",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-rounded-radar",
+    "name": "Mono Polygon Web Radar",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-radar",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
     "id": "mono-rounded-radial-group",
-    "name": "Mono Rounded Radial Group",
+    "name": "Mono Radial Bar Group",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-radial-group",
     "source": "src/data/componentEntries.ts"
   },
   {
     "id": "mono-rounded-range",
-    "name": "Mono Rounded Range",
+    "name": "Mono Range Band Area",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-range",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "mono-rounded-sankey",
-    "name": "Mono Rounded Sankey",
+    "id": "mono-rounded-donut",
+    "name": "Mono Rounded Donut Ring",
     "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-sankey",
-    "source": "src/data/componentEntries.ts"
+    "source": "src/components/mono-charts/MonoRoundedDonutChart.tsx",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-donut"
+  },
+  {
+    "id": "mono-rounded-bar",
+    "name": "Mono Rounded Pill Pillars",
+    "family": "mono-charts",
+    "source": "src/components/mono-charts/MonoRoundedBarChart.tsx",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-bar"
+  },
+  {
+    "id": "mono-rounded-line",
+    "name": "Mono Rounded Spline Line",
+    "family": "mono-charts",
+    "source": "src/components/mono-charts/MonoRoundedLineChart.tsx",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-line"
   },
   {
     "id": "mono-rounded-scatter",
-    "name": "Mono Rounded Scatter",
+    "name": "Mono Scatter Matrix",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-scatter",
     "source": "src/data/componentEntries.ts"
   },
   {
     "id": "mono-rounded-sparkline",
-    "name": "Mono Rounded Sparkline",
+    "name": "Mono Sparkline Telemetry",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-sparkline",
     "source": "src/data/componentEntries.ts"
   },
   {
+    "id": "mono-rounded-gauge-arc",
+    "name": "Mono Speedometer Gauge Arc",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-gauge-arc",
+    "source": "src/data/componentEntries.ts"
+  },
+  {
     "id": "mono-rounded-stacked-bar",
-    "name": "Mono Rounded Stacked Bar",
+    "name": "Mono Stacked Tones Bar",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-stacked-bar",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "mono-rounded-step",
-    "name": "Mono Rounded Step",
+    "id": "mono-rounded-funnel",
+    "name": "Mono Stage Funnel",
     "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-step",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-funnel",
+    "source": "src/components/mono-charts/MonoRoundedFunnelChart.tsx"
+  },
+  {
+    "id": "mono-rounded-kpi",
+    "name": "Mono Stat KPI Card",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-kpi",
     "source": "src/data/componentEntries.ts"
   },
   {
-    "id": "mono-rounded-stream",
-    "name": "Mono Rounded Stream",
+    "id": "mono-rounded-step",
+    "name": "Mono Step Progression",
     "family": "mono-charts",
-    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-stream",
-    "source": "src/data/componentEntries.ts"
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-step",
+    "source": "src/components/mono-charts/MonoRoundedStepChart.tsx"
+  },
+  {
+    "id": "mono-rounded-pyramid",
+    "name": "Mono Tier Pyramid Stack",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-pyramid",
+    "source": "src/components/mono-charts/MonoRoundedPyramidChart.tsx"
   },
   {
     "id": "mono-rounded-treemap",
-    "name": "Mono Rounded Treemap",
+    "name": "Mono Tile Treemap",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-treemap",
     "source": "src/data/componentEntries.ts"
   },
   {
     "id": "mono-rounded-waterfall",
-    "name": "Mono Rounded Waterfall",
+    "name": "Mono Waterfall Steps",
     "family": "mono-charts",
     "preview": "https://amicro.vercel.app/mono-charts/mono-rounded-waterfall",
     "source": "src/data/componentEntries.ts"
+  },
+  {
+    "id": "mono-activity-blue",
+    "name": "Sky Blue Activity Heatmap",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-activity-blue",
+    "source": "src/components/mono-charts/MonoActivityHeatmap.tsx"
+  },
+  {
+    "id": "mono-activity-purple",
+    "name": "Violet Activity Heatmap",
+    "family": "mono-charts",
+    "preview": "https://amicro.vercel.app/mono-charts/mono-activity-purple",
+    "source": "src/components/mono-charts/MonoActivityHeatmap.tsx"
   },
   {
     "id": "add-to-cart-morph",

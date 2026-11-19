@@ -82,14 +82,17 @@ for file, family, route in [
     ("src/data/monoCharts.ts", "mono-charts", "mono-charts"),
     ("src/data/ditherCharts.ts", "dither-charts", "dither-charts"),
 ]:
-    for m in re.finditer(r"\{\s*id:\s*['\"]([^'\"]+)['\"]\s*,\s*(?:name|label):\s*['\"]([^'\"]+)['\"]", read(file)):
+    catalog = read(file)
+    for m in re.finditer(r"\{\s*id:\s*['\"]([^'\"]+)['\"]\s*,\s*(?:name|label|title):\s*['\"]([^'\"]+)['\"]", catalog):
         key, name = m.groups()
         if family == "text":
-            effect = re.match(r",\s*interactionType: '([^']+)'", read(file)[m.end():])
+            effect = re.match(r",\s*interactionType: '([^']+)'", catalog[m.end():])
             if effect:
                 key = effect[1]
                 add(key, name, family, entries.get(key, {}).get("source", file), f"https://amicro.vercel.app/{route}", effect=key)
-        if key not in entries:
+        if key in entries:
+            entries[key]["name"] = name
+        else:
             add(key, name, family, file, f"https://amicro.vercel.app/{route}")
 
 for folder, family, route in [
@@ -112,6 +115,29 @@ for folder, family, route in [
 
 for row in entries.values():
     row.setdefault("source", "src/data/componentEntries.ts")
+
+kit = "src/components/css-animations/ui-interactions/"
+for key, path in {
+    "ui-context-menu": "ActionsUiKit.tsx", "ui-ab-tabs": "ActionsUiKit.tsx",
+    "ui-category-select": "ControlsUiKit.tsx", "ui-date-position": "ControlsUiKit.tsx",
+    "ui-light-dark-toggle": "ControlsUiKit.tsx", "ui-save-pill": "StatusPreviewTrios.tsx",
+    "ui-segmented-step-bar": "NavigationTrios.tsx",
+}.items():
+    if key in entries:
+        entries[key]["source"] = kit + path
+
+for key in ["line", "bar", "area", "donut", "composed", "gauge-arc", "step", "funnel", "heatmap", "pyramid"]:
+    identifier = "mono-rounded-" + key
+    file = "src/components/mono-charts/MonoRounded" + key.title().replace("-", "") + "Chart.tsx"
+    if identifier in entries and (upstream / file).is_file():
+        entries[identifier]["source"] = file
+for color in ["green", "blue", "purple"]:
+    if "mono-activity-" + color in entries:
+        entries["mono-activity-" + color]["source"] = "src/components/mono-charts/MonoActivityHeatmap.tsx"
+
+for row in entries.values():
+    if not (upstream / row["source"]).is_file():
+        raise SystemExit(f"Missing component source for {row['id']}: {row['source']}")
 
 result = sorted(entries.values(), key=lambda row: (row["family"], (int(row["id"][4:]) if row["id"].startswith("btn-") else row["name"].casefold())))
 payload = json.dumps(result, ensure_ascii=False, indent=2)

@@ -6,7 +6,7 @@ This project ports the public Amicro component examples into NSH 0.6 TSX. GitHub
 
 - `catalog.ts` exposes the pinned upstream inventory and provenance by sample ID. Its generated input combines the upstream site sitemap, registry and category data. An entry names a real source or preview, and remains pending until it has a runnable NSH implementation. Multiple variants using the same engine keep separate IDs where Amicro does.
 - `ports/` owns reusable native components by family. Component props carry variation, label and palette. Each preview instance owns its state, releases timers on unmount, and respects reduced motion. The port imports only NSH and local modules. The UI accepts user actions without needing to know the pressure, timeline, or easing state.
-- `App.tsx` owns language, theme, browsing, and selection. It uses a single gallery for the English and Chinese versions, exposes the same sample set in both, and shows a pending message if an indexed component has no local renderer. Attribution and the license ships with the Web assets. The gallery operates with static files and local state.
+- `Gallery.tsx` owns language, theme, browsing, and selection. The English and Chinese Web entrypoints (`App.tsx`, `App.zh.tsx`) share it. Both expose the same sample set and show a pending message if an indexed component has no local renderer. Attribution and the license ship with each Web distribution. The gallery operates with static files and local state.
 
 ## Acceptance
 
