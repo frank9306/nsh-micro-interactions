@@ -8,4 +8,5 @@ let e5=host.get("nsh:rt")["element"];export{e5 as "element"};
 let e6=host.get("nsh:rt")["insert"];export{e6 as "insert"};
 let e7=host.get("nsh:rt")["prop"];export{e7 as "prop"};
 let e8=host.get("nsh:rt")["setup"];export{e8 as "setup"};
-globalThis.__nsh_browser_realm.watch(()=>{e0=host.get("nsh:rt")["append"];e1=host.get("nsh:rt")["bindProp"];e2=host.get("nsh:rt")["component"];e3=host.get("nsh:rt")["cond"];e4=host.get("nsh:rt")["each"];e5=host.get("nsh:rt")["element"];e6=host.get("nsh:rt")["insert"];e7=host.get("nsh:rt")["prop"];e8=host.get("nsh:rt")["setup"];});
+let e9=host.get("nsh:rt")["text"];export{e9 as "text"};
+globalThis.__nsh_browser_realm.watch(()=>{e0=host.get("nsh:rt")["append"];e1=host.get("nsh:rt")["bindProp"];e2=host.get("nsh:rt")["component"];e3=host.get("nsh:rt")["cond"];e4=host.get("nsh:rt")["each"];e5=host.get("nsh:rt")["element"];e6=host.get("nsh:rt")["insert"];e7=host.get("nsh:rt")["prop"];e8=host.get("nsh:rt")["setup"];e9=host.get("nsh:rt")["text"];});

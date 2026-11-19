@@ -70,6 +70,56 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "app-icon-load": {
+    "classes": "relative w-12 h-12 bg-zinc-200 dark:bg-zinc-800 rounded-[12px] flex items-center justify-center overflow-hidden",
+    "children": [
+      {
+        "kind": "svg",
+        "attributes": {
+          "viewBox": "0 0 50 50"
+        },
+        "classes": "w-8 h-8 absolute",
+        "children": [
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "25",
+              "cy": "25",
+              "r": "20",
+              "strokeWidth": "4"
+            },
+            "classes": "stroke-zinc-300 dark:stroke-zinc-700 fill-none"
+          },
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "25",
+              "cy": "25",
+              "r": "20",
+              "strokeWidth": "4",
+              "strokeDasharray": "125"
+            },
+            "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+            "style": {
+              "rotate": -90,
+              "transformOrigin": "center"
+            },
+            "animation": {
+              "strokeDashoffset": [
+                125,
+                0
+              ]
+            },
+            "timing": {
+              "duration": 2,
+              "repeat": "infinite",
+              "ease": "easeInOut"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "apple-breathe": {
     "classes": "relative flex items-center justify-center w-12 h-12",
     "children": [
@@ -482,6 +532,49 @@ export const recipes: Record<string, LoaderNode> = {
         "children": [
           "Loading"
         ]
+      }
+    ]
+  },
+  "arc-tracer": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-10 h-10",
+    "children": [
+      {
+        "kind": "circle",
+        "attributes": {
+          "cx": "25",
+          "cy": "25",
+          "r": "20",
+          "strokeWidth": "4"
+        },
+        "classes": "stroke-zinc-200 dark:stroke-zinc-800 fill-none"
+      },
+      {
+        "kind": "circle",
+        "attributes": {
+          "cx": "25",
+          "cy": "25",
+          "r": "20",
+          "strokeWidth": "4",
+          "strokeLinecap": "round",
+          "strokeDasharray": "125"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "animation": {
+          "strokeDashoffset": [
+            125,
+            0,
+            -125
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "easeInOut"
+        }
       }
     ]
   },
@@ -1635,6 +1728,58 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "cube-flip-spring": {
+    "classes": "w-8 h-8 bg-zinc-800 dark:bg-white rounded-lg",
+    "animation": {
+      "rotateX": [
+        0,
+        180,
+        180
+      ],
+      "rotateY": [
+        0,
+        0,
+        180
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "type": "spring",
+      "bounce": 0.2
+    }
+  },
+  "dash-ring": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-12 h-12",
+    "children": [
+      {
+        "kind": "circle",
+        "attributes": {
+          "cx": "25",
+          "cy": "25",
+          "r": "20",
+          "strokeWidth": "3",
+          "strokeDasharray": "8 8"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "style": {
+          "transformOrigin": "center"
+        },
+        "animation": {
+          "rotate": 360
+        },
+        "timing": {
+          "duration": 4,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
+      }
+    ]
+  },
   "dashed-spiral": {
     "classes": "w-10 h-10 border-[3px] border-zinc-800 dark:border-zinc-700 rounded-full border-dashed",
     "animation": {
@@ -1739,6 +1884,26 @@ export const recipes: Record<string, LoaderNode> = {
         }
       }
     ]
+  },
+  "diamond-rotate-spring": {
+    "classes": "w-8 h-8 bg-zinc-800 dark:bg-white rounded-sm origin-center",
+    "style": {
+      "rotate": 45
+    },
+    "animation": {
+      "rotate": [
+        45,
+        135,
+        225,
+        315
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "type": "spring",
+      "bounce": 0.4
+    }
   },
   "dot-spinner": {
     "classes": "relative w-10 h-10",
@@ -2113,6 +2278,67 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "drop-dot": {
+    "classes": "relative w-6 h-12 flex flex-col items-center",
+    "children": [
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full absolute top-0 z-10",
+        "animation": {
+          "y": [
+            0,
+            24,
+            0
+          ],
+          "scaleY": [
+            1,
+            1.2,
+            1
+          ],
+          "scaleX": [
+            1,
+            0.8,
+            1
+          ]
+        },
+        "timing": {
+          "duration": 1,
+          "repeat": "infinite",
+          "ease": "circIn"
+        }
+      },
+      {
+        "classes": "w-4 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full absolute bottom-2 blur-[1px]"
+      }
+    ]
+  },
+  "dual-arc": {
+    "classes": "relative w-8 h-8 flex items-center justify-center",
+    "children": [
+      {
+        "classes": "absolute inset-0 border-2 border-t-zinc-800 dark:border-t-white border-b-zinc-800 dark:border-b-white border-l-transparent border-r-transparent rounded-full",
+        "animation": {
+          "rotate": 360,
+          "scale": [
+            1,
+            0.82,
+            1
+          ]
+        },
+        "timing": {
+          "rotate": {
+            "duration": 1.2,
+            "repeat": "infinite",
+            "ease": "linear"
+          },
+          "scale": {
+            "duration": 1.2,
+            "repeat": "infinite",
+            "ease": "easeInOut"
+          }
+        }
+      }
+    ]
+  },
   "dynamic-island": {
     "classes": "bg-zinc-950 dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center px-4 py-2 gap-3 h-8 shadow-sm",
     "animation": {
@@ -2314,6 +2540,88 @@ export const recipes: Record<string, LoaderNode> = {
           "ease": "easeInOut",
           "delay": 0.75
         }
+      }
+    ]
+  },
+  "face-id-scan": {
+    "classes": "w-12 h-12 border-2 border-zinc-300 rounded-xl relative overflow-hidden flex items-center justify-center",
+    "children": [
+      {
+        "kind": "svg",
+        "attributes": {
+          "viewBox": "0 0 24 24"
+        },
+        "classes": "w-6 h-6 fill-zinc-300 dark:fill-zinc-700",
+        "children": [
+          {
+            "kind": "path",
+            "attributes": {
+              "d": "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+            }
+          }
+        ]
+      },
+      {
+        "classes": "absolute left-0 w-full h-8 bg-gradient-to-b from-transparent to-green-400/30 border-b border-green-500",
+        "animation": {
+          "top": [
+            "-100%",
+            "100%",
+            "-100%"
+          ]
+        },
+        "timing": {
+          "duration": 2.5,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
+      }
+    ]
+  },
+  "fade-arc": {
+    "classes": "relative w-9 h-9",
+    "children": [
+      {
+        "kind": "svg",
+        "attributes": {
+          "viewBox": "0 0 50 50"
+        },
+        "classes": "w-full h-full ",
+        "animation": {
+          "rotate": 360
+        },
+        "timing": {
+          "duration": 1,
+          "ease": "linear",
+          "repeat": "infinite"
+        },
+        "children": [
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "25",
+              "cy": "25",
+              "r": "20",
+              "fill": "none",
+              "strokeWidth": "3.5"
+            },
+            "classes": "stroke-zinc-200 dark:stroke-zinc-800"
+          },
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "25",
+              "cy": "25",
+              "r": "20",
+              "fill": "none",
+              "strokeWidth": "3.5",
+              "strokeDasharray": "80",
+              "strokeDashoffset": "28",
+              "strokeLinecap": "round"
+            },
+            "classes": "stroke-zinc-800 dark:stroke-white"
+          }
+        ]
       }
     ]
   },
@@ -2885,6 +3193,93 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "haptic-ring": {
+    "classes": "w-10 h-10 border-[3px] border-zinc-200 dark:border-zinc-800 rounded-full border-t-zinc-800 dark:border-t-white",
+    "animation": {
+      "rotate": [
+        0,
+        90,
+        180,
+        270,
+        360
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "type": "spring",
+      "bounce": 0.4
+    }
+  },
+  "heartbeat": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 64 32"
+    },
+    "classes": "w-16 h-8 overflow-visible",
+    "children": [
+      {
+        "kind": "polyline",
+        "attributes": {
+          "points": "0,16 16,16 24,4 32,28 40,16 64,16",
+          "strokeWidth": "2",
+          "strokeLinejoin": "round",
+          "strokeLinecap": "round",
+          "strokeDasharray": "100"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "animation": {
+          "strokeDashoffset": [
+            100,
+            -100
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
+      }
+    ]
+  },
+  "hexagon-spinner": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-10 h-10",
+    "children": [
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,15 45,35 25,45 5,35 5,15",
+          "strokeWidth": "4"
+        },
+        "classes": "stroke-zinc-200 dark:stroke-zinc-800 fill-none"
+      },
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,15 45,35 25,45 5,35 5,15",
+          "strokeWidth": "4",
+          "strokeLinecap": "round",
+          "strokeDasharray": "120"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "animation": {
+          "strokeDashoffset": [
+            120,
+            -120
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
+      }
+    ]
+  },
   "hourglass": {
     "classes": "w-8 h-10 flex flex-col items-center justify-between",
     "animation": {
@@ -2907,6 +3302,45 @@ export const recipes: Record<string, LoaderNode> = {
       },
       {
         "classes": "w-8 h-0 border-b-[16px] border-b-zinc-800 dark:border-b-white border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent origin-top"
+      }
+    ]
+  },
+  "infinity-path": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 60 30"
+    },
+    "classes": "w-12 h-6 overflow-visible",
+    "children": [
+      {
+        "kind": "path",
+        "attributes": {
+          "d": "M 15 15 C 15 5, 25 5, 30 15 C 35 25, 45 25, 45 15 C 45 5, 35 5, 30 15 C 25 25, 15 25, 15 15",
+          "strokeWidth": "4",
+          "strokeLinecap": "round"
+        },
+        "classes": "stroke-zinc-200 dark:stroke-zinc-800 fill-none"
+      },
+      {
+        "kind": "path",
+        "attributes": {
+          "d": "M 15 15 C 15 5, 25 5, 30 15 C 35 25, 45 25, 45 15 C 45 5, 35 5, 30 15 C 25 25, 15 25, 15 15",
+          "strokeWidth": "4",
+          "strokeLinecap": "round",
+          "strokeDasharray": "100"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "animation": {
+          "strokeDashoffset": [
+            100,
+            -100
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
       }
     ]
   },
@@ -3235,6 +3669,74 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "minimal-triangle": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-10 h-10 overflow-visible",
+    "children": [
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,40 5,40",
+          "strokeWidth": "3"
+        },
+        "classes": "stroke-zinc-200 dark:stroke-zinc-800 fill-none"
+      },
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,40 5,40",
+          "strokeWidth": "3",
+          "strokeDasharray": "120"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none",
+        "animation": {
+          "strokeDashoffset": [
+            120,
+            0,
+            -120
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "easeInOut"
+        }
+      }
+    ]
+  },
+  "morph-dot-ring": {
+    "classes": "grid grid-cols-2 gap-1 w-6 h-6",
+    "animation": {
+      "rotate": 180,
+      "gap": [
+        "4px",
+        "0px",
+        "4px"
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "ease": "easeInOut"
+    },
+    "children": [
+      {
+        "classes": "w-full h-full bg-zinc-800 dark:bg-white rounded-full"
+      },
+      {
+        "classes": "w-full h-full bg-zinc-800 dark:bg-white rounded-full"
+      },
+      {
+        "classes": "w-full h-full bg-zinc-800 dark:bg-white rounded-full"
+      },
+      {
+        "classes": "w-full h-full bg-zinc-800 dark:bg-white rounded-full"
+      }
+    ]
+  },
   "morph-loader": {
     "classes": "relative flex items-center justify-center ",
     "style": {
@@ -3275,6 +3777,68 @@ export const recipes: Record<string, LoaderNode> = {
           "duration": 2.2,
           "ease": "easeInOut",
           "repeat": "infinite"
+        }
+      }
+    ]
+  },
+  "morphing-bars": {
+    "classes": "flex space-x-1 h-8 items-center",
+    "animation": {
+      "gap": [
+        "4px",
+        "0px",
+        "4px"
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "ease": "easeInOut"
+    },
+    "children": [
+      {
+        "classes": "w-2 h-8 bg-zinc-800 dark:bg-white rounded-sm",
+        "animation": {
+          "height": [
+            32,
+            16,
+            32
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2 h-8 bg-zinc-800 dark:bg-white rounded-sm",
+        "animation": {
+          "height": [
+            32,
+            16,
+            32
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2 h-8 bg-zinc-800 dark:bg-white rounded-sm",
+        "animation": {
+          "height": [
+            32,
+            16,
+            32
+          ]
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "easeInOut"
         }
       }
     ]
@@ -3798,6 +4362,40 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "pumping-heart": {
+    "classes": "w-8 h-8",
+    "animation": {
+      "scale": [
+        1,
+        1.25,
+        1,
+        1.25,
+        1
+      ]
+    },
+    "timing": {
+      "duration": 1.5,
+      "repeat": "infinite",
+      "ease": "easeInOut"
+    },
+    "children": [
+      {
+        "kind": "svg",
+        "attributes": {
+          "viewBox": "0 0 24 24"
+        },
+        "classes": "fill-zinc-800 dark:fill-white",
+        "children": [
+          {
+            "kind": "path",
+            "attributes": {
+              "d": "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "radar-sweep": {
     "classes": "relative w-12 h-12 rounded-full border border-zinc-800/10 dark:border-white/10 flex items-center justify-center overflow-hidden",
     "children": [
@@ -3912,6 +4510,32 @@ export const recipes: Record<string, LoaderNode> = {
       },
       {
         "classes": "absolute h-full w-1.5 bg-zinc-800 dark:bg-white rounded-sm"
+      }
+    ]
+  },
+  "rotating-triangle": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-10 h-10 overflow-visible",
+    "children": [
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,40 5,40",
+          "strokeWidth": "4",
+          "strokeLinejoin": "round"
+        },
+        "classes": "stroke-zinc-800 dark:stroke-white fill-none origin-center",
+        "animation": {
+          "rotate": 360
+        },
+        "timing": {
+          "duration": 2,
+          "repeat": "infinite",
+          "ease": "linear"
+        }
       }
     ]
   },
@@ -4269,6 +4893,52 @@ export const recipes: Record<string, LoaderNode> = {
       }
     ]
   },
+  "smooth-ring": {
+    "classes": "w-9 h-9",
+    "children": [
+      {
+        "kind": "svg",
+        "attributes": {
+          "viewBox": "0 0 32 32"
+        },
+        "classes": "w-full h-full ",
+        "animation": {
+          "rotate": 360
+        },
+        "timing": {
+          "duration": 1,
+          "ease": "linear",
+          "repeat": "infinite"
+        },
+        "children": [
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "16",
+              "cy": "16",
+              "r": "14",
+              "fill": "none",
+              "strokeWidth": "3"
+            },
+            "classes": "stroke-zinc-200 dark:stroke-zinc-800"
+          },
+          {
+            "kind": "circle",
+            "attributes": {
+              "cx": "16",
+              "cy": "16",
+              "r": "14",
+              "fill": "none",
+              "strokeWidth": "3",
+              "strokeDasharray": "38 80",
+              "strokeLinecap": "round"
+            },
+            "classes": "stroke-zinc-800 dark:stroke-white"
+          }
+        ]
+      }
+    ]
+  },
   "smooth-rounded-square": {
     "classes": "w-10 h-10 border-[3px] border-zinc-800 dark:border-zinc-700",
     "animation": {
@@ -4552,6 +5222,40 @@ export const recipes: Record<string, LoaderNode> = {
           "ease": "easeInOut",
           "delay": 0.6
         }
+      }
+    ]
+  },
+  "spring-hexagon": {
+    "kind": "svg",
+    "attributes": {
+      "viewBox": "0 0 50 50"
+    },
+    "classes": "w-10 h-10",
+    "animation": {
+      "scale": [
+        1,
+        1.15,
+        1
+      ],
+      "rotate": [
+        0,
+        60,
+        60
+      ]
+    },
+    "timing": {
+      "duration": 2,
+      "repeat": "infinite",
+      "type": "spring",
+      "bounce": 0.3
+    },
+    "children": [
+      {
+        "kind": "polygon",
+        "attributes": {
+          "points": "25,5 45,15 45,35 25,45 5,35 5,15"
+        },
+        "classes": "fill-zinc-800 dark:fill-white"
       }
     ]
   },
@@ -4926,6 +5630,155 @@ export const recipes: Record<string, LoaderNode> = {
           "duration": 1.5,
           "repeat": "infinite",
           "delay": 0.6000000000000001,
+          "ease": "easeInOut"
+        }
+      }
+    ]
+  },
+  "square-snake": {
+    "classes": "grid grid-cols-3 gap-1 w-10 h-10",
+    "children": [
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.15,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.3,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.15,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.3,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.44999999999999996,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.3,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.44999999999999996,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "bg-zinc-800 dark:bg-white rounded-sm w-full h-full",
+        "animation": {
+          "opacity": [
+            0.1,
+            1,
+            0.1
+          ]
+        },
+        "timing": {
+          "duration": 1.5,
+          "repeat": "infinite",
+          "delay": 0.6,
           "ease": "easeInOut"
         }
       }
@@ -6163,6 +7016,131 @@ export const recipes: Record<string, LoaderNode> = {
           "duration": 1,
           "repeat": "infinite",
           "delay": 0.32849329935939453,
+          "ease": "easeInOut"
+        }
+      }
+    ]
+  },
+  "zig-zag-pulse": {
+    "classes": "grid grid-cols-3 gap-2 w-12 h-12",
+    "children": [
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 1,
+          "gridRow": 1
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 2,
+          "gridRow": 2
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0.1,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 3,
+          "gridRow": 1
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0.2,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 1,
+          "gridRow": 3
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0.30000000000000004,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 2,
+          "gridRow": 2
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0.4,
+          "ease": "easeInOut"
+        }
+      },
+      {
+        "classes": "w-2.5 h-2.5 bg-zinc-800 dark:bg-white rounded-full",
+        "style": {
+          "gridColumn": 3,
+          "gridRow": 3
+        },
+        "animation": {
+          "opacity": [
+            0.2,
+            1,
+            0.2
+          ]
+        },
+        "timing": {
+          "duration": 1.2,
+          "repeat": "infinite",
+          "delay": 0.5,
           "ease": "easeInOut"
         }
       }

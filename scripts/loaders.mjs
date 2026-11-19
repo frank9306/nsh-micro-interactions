@@ -12,14 +12,17 @@ const nodes = {};
 const skipped = [];
 const reject = note => { throw new Error(note); };
 const allowedKeys = new Set(["x", "y", "scale", "scaleX", "scaleY", "rotate", "rotateX", "rotateY", "opacity",
-  "width", "height", "borderWidth", "borderRadius", "backgroundColor"]);
+  "width", "height", "top", "gap", "borderWidth", "borderRadius", "strokeDashoffset", "strokeWidth"]);
 const attrs = new Set(["key", "className", "style", "initial", "animate", "transition"]);
-const easeNames = new Set(["linear", "easeIn", "easeOut", "easeInOut"]);
+const easeNames = new Set(["linear", "easeIn", "easeOut", "easeInOut", "circIn"]);
 const styleKeys = new Set(["top", "right", "bottom", "left", "width", "height", "opacity", "borderRadius", "borderWidth",
   "background", "backgroundColor", "backgroundImage", "transform", "transformOrigin", "rotate", "boxShadow", "borderColor", "zIndex",
-  "filter", "maskImage", "WebkitMaskImage"]);
-const transitionKeys = new Set(["duration", "repeat", "repeatType", "delay", "ease", "times", "repeatDelay"]);
+  "filter", "maskImage", "WebkitMaskImage", "gridColumn", "gridRow"]);
+const transitionKeys = new Set(["duration", "repeat", "repeatType", "delay", "ease", "times", "repeatDelay", "type", "bounce"]);
 const constant = (scope, key) => scope.has(key) ? scope.get(key) : reject(`unbound ${key}`);
+const vectorElements = new Set(["svg", "circle", "ellipse", "path", "polygon", "polyline", "line", "rect", "g"]);
+const vectorAttrs = new Set(["viewBox", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "d", "points",
+  "x1", "y1", "x2", "y2", "fill", "stroke", "strokeWidth", "strokeDasharray", "strokeDashoffset", "strokeLinecap", "strokeLinejoin"]);
 
 function operator(code, a, b) {
   switch (code) {
@@ -48,6 +51,11 @@ function run(fn, outer, args = []) {
         const value = given?.[part.propertyName?.getText() ?? part.name.text];
         vars.set(part.name.text, value ?? (part.initializer ? parse(part.initializer, vars) : undefined));
       }
+    } else if (ts.isArrayBindingPattern(parameter.name) && Array.isArray(given)) {
+      for (const [index, part] of parameter.name.elements.entries()) {
+        if (!ts.isBindingElement(part) || !ts.isIdentifier(part.name) || part.dotDotDotToken) reject("unsupported array binding");
+        vars.set(part.name.text, given[index]);
+      }
     } else reject("unsupported parameter");
   });
   if (!ts.isBlock(fn.body)) return parse(fn.body, vars);
@@ -63,15 +71,24 @@ function run(fn, outer, args = []) {
 }
 
 function shape(open, children, scope) {
-  const kind = open.tagName.getText();
-  if (!["div", "span", "motion.div", "motion.span"].includes(kind)) reject(`unsupported element ${kind}`);
+  const kind = open.tagName.getText().replace(/^motion\./, "");
+  const vector = vectorElements.has(kind);
+  if (kind !== "div" && kind !== "span" && !vector) reject(`unsupported element ${kind}`);
   const props = {};
+  const attributes = {};
   for (const attr of open.attributes.properties) {
     if (!ts.isJsxAttribute(attr)) reject("JSX spread");
     const key = attr.name.getText();
-    if (!attrs.has(key)) reject(`prop ${key}`);
     if (key === "key") continue;
-    props[key] = attr.initializer ? parse(attr.initializer, scope) : true;
+    const value = attr.initializer ? parse(attr.initializer, scope) : true;
+    if (attrs.has(key)) props[key] = value;
+    else if (vector && vectorAttrs.has(key)) attributes[key] = value;
+    else reject(`prop ${key}`);
+  }
+  if (kind === "svg" && !props.animate && props.className?.split(/\s+/).includes("animate-spin")) {
+    props.className = props.className.replace(/\banimate-spin\b/g, "");
+    props.animate = { rotate: 360 };
+    props.transition = { duration: 1, ease: "linear", repeat: "infinite" };
   }
   if (props.className !== undefined && typeof props.className !== "string") reject("invalid class");
   const animation = props.animate;
@@ -83,13 +100,21 @@ function shape(open, children, scope) {
       if (![frames].flat().every(f => typeof f === "number" || (typeof f === "string" && /^-?\d+(?:\.\d+)?(?:px|%|deg)$/.test(f)))) {
         reject("unsupported motion value");
       }
-      if (!["width", "height", "borderRadius", "x", "y"].includes(channel) && [frames].flat().some(f => typeof f === "string" && f.endsWith("%"))) {
+      if (!["width", "height", "top", "borderRadius", "x", "y"].includes(channel) && [frames].flat().some(f => typeof f === "string" && f.endsWith("%"))) {
         reject("percentage on a non-length channel");
       }
     }
   }
-  if (transition && Object.keys(transition).some(key => !transitionKeys.has(key))) reject("unsupported timing");
-  if (transition?.ease && !easeNames.has(transition.ease)) reject("unsupported easing");
+  function checkTiming(timing, nested) {
+    for (const [key, value] of Object.entries(timing ?? {})) {
+      if (transitionKeys.has(key)) continue;
+      if (!nested || !allowedKeys.has(key) || typeof value !== "object") reject("unsupported timing");
+      checkTiming(value, false);
+    }
+    if (timing?.ease && !easeNames.has(timing.ease)) reject("unsupported easing");
+    if (timing?.type && timing.type !== "spring") reject("unsupported timing type");
+  }
+  checkTiming(transition, true);
   if (props.style && Object.keys(props.style).some(key => !styleKeys.has(key))) reject("unsupported style");
   if (props.style) delete props.style.WebkitMaskImage;
   for (const [key, value] of Object.entries(props.style ?? {})) {
@@ -99,6 +124,7 @@ function shape(open, children, scope) {
   }
   const nested = children.flat(Infinity).filter(child => child != null && child !== false && (typeof child !== "string" || child.trim()));
   return {
+    ...(vector ? { kind, attributes } : {}),
     ...(props.className ? { classes: props.className } : {}), ...(props.style ? { style: props.style } : {}),
     ...(animation ? { animation, timing: transition ?? {}, ...(initial ? { initial } : {}) } : {}),
     ...(nested.length ? { children: nested } : {}),

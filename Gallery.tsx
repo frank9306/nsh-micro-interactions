@@ -1,5 +1,5 @@
 import { Scroll, Text, View, signal, windowSize, type JSX, type TextStyle, type ViewStyle } from "nsh";
-import { Button, Input, Link } from "nsh/base";
+import { Button, Input, Link, Menu, MenuItem } from "nsh/base";
 import { Head } from "nsh/web";
 import { inventory, portFor } from "./catalog";
 import { repository, themes, type Entry, type Language } from "./model";
@@ -12,13 +12,25 @@ import { TextMotion } from "./ports/TextMotion";
 import { UiMotion } from "./ports/UiMotion";
 import { ChartMotion } from "./ports/ChartMotion";
 import { AiMotion } from "./ports/AiMotion";
+import { ShapeMotion } from "./ports/ShapeMotion";
+import { TextEffects } from "./ports/TextEffects";
+import { ActionMorph } from "./ports/ActionMorph";
+import { LoaderSpecial } from "./ports/LoaderSpecial";
+import { DitherMotion } from "./ports/DitherMotion";
+import { MonoMore } from "./ports/MonoMore";
+import { AiStudio } from "./ports/AiStudio";
 
 const ready = inventory.filter(entry => portFor(entry));
 const deploy = ready.find(entry => entry.id === "btn-3")!;
 const horizontal: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 8, flexWrap: "wrap" };
 const pageSize = 12;
 const familyOrder = Object.keys(families);
-const portFile = { button: "ButtonMotion", card: "CardMotion", depth: "CardDepth", loader: "LoaderMotion", text: "TextMotion", ui: "UiMotion", chart: "ChartMotion", ai: "AiMotion" };
+const portFile = {
+  button: "ButtonMotion", card: "CardMotion", depth: "CardDepth", loader: "LoaderMotion",
+  text: "TextMotion", textEffect: "TextEffects", ui: "UiMotion", chart: "ChartMotion", ai: "AiMotion", shape: "ShapeMotion",
+  actionMorph: "ActionMorph",
+  specialLoader: "LoaderSpecial", dither: "DitherMotion", monoMore: "MonoMore", aiStudio: "AiStudio",
+};
 type Tone = "text" | "muted" | "accent" | "onAccent";
 
 export function Gallery(props: { initialLanguage: Language }) {
@@ -84,6 +96,44 @@ export function Gallery(props: { initialLanguage: Language }) {
     </Link>;
   }
 
+  function HeaderActions() {
+    const themeLabel = () => appearance() === "dark"
+      ? (zh() ? "切换到浅色主题" : "Switch to light theme")
+      : (zh() ? "切换到深色主题" : "Switch to dark theme");
+    const languageLabel = () => zh() ? "语言" : "Language";
+    const iconStyle = (): ViewStyle => ({
+      width: 41, height: 41, alignItems: "center", justifyContent: "center",
+      borderWidth: 1, borderColor: ink().border, backgroundColor: ink().panel, borderRadius: 22,
+    });
+    const ring = () => ({ outlineWidth: 2, outlineOffset: 2, outlineColor: ink().accent });
+    const hover = () => ({ backgroundColor: ink().tint, borderColor: ink().accent });
+    const locales = [{ id: "en" as const, caption: "English" }, { id: "zh" as const, caption: "简体中文" }];
+    return <View style={{ ...horizontal, gap: 7, flexWrap: "nowrap" }}>
+      <Link href={repository} accessibilityLabel={t().github} title={t().github}
+        style={iconStyle()} class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
+        <Glyph name="github" color={ink().text} />
+      </Link>
+      <Menu popupStyle={{ minWidth: 136, padding: 4, borderRadius: 12, borderWidth: 1,
+        borderColor: ink().border, backgroundColor: ink().panel }}
+        trigger={<View accessibilityLabel={languageLabel()} tooltip={languageLabel()} style={iconStyle()}
+          class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
+          <Glyph name="languages" color={ink().text} />
+        </View>}>
+        {locales.map(locale => <MenuItem accessibilityLabel={locale.caption} onSelect={() => language.set(locale.id)}
+          focusStyle={hover()} style={{ ...horizontal, flexWrap: "nowrap", minHeight: 36, paddingHorizontal: 10,
+            justifyContent: "space-between", borderRadius: 8 }}>
+          <Type size={14}>{locale.caption}</Type>
+          <If when={language() === locale.id}><Glyph name="check" color={ink().accent} size={14} /></If>
+        </MenuItem>)}
+      </Menu>
+      <Button accessibilityLabel={themeLabel()} tooltip={themeLabel()} style={iconStyle()}
+        class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}
+        onPress={() => appearance.update(value => value === "dark" ? "light" : "dark")}>
+        <Glyph name={appearance() === "dark" ? "sun" : "moon"} color={ink().text} />
+      </Button>
+    </View>;
+  }
+
   function Preview(p: { entry: Entry }) {
     const port = () => portFor(p.entry);
     return <View testID={`preview-${p.entry.id}`} style={{
@@ -109,10 +159,17 @@ export function Gallery(props: { initialLanguage: Language }) {
         <If when={port() === "card"}><CardMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
         <If when={port() === "depth"}><CardDepth id={p.entry.id} ink={ink()} language={language()} /></If>
         <If when={port() === "loader"}><LoaderMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "specialLoader"}><LoaderSpecial id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
         <If when={port() === "text"}><TextMotion id={p.entry.id} ink={ink()} language={language()} /></If>
+        <If when={port() === "textEffect"}><TextEffects id={p.entry.id} ink={ink()} language={language()} /></If>
+        <If when={port() === "shape"}><ShapeMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "actionMorph"}><ActionMorph id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
         <If when={port() === "ui"}><UiMotion id={p.entry.id} ink={ink()} language={language()} /></If>
         <If when={port() === "chart"}><ChartMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "monoMore"}><MonoMore id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
+        <If when={port() === "dither"}><DitherMotion id={p.entry.id} label={name(p.entry)} ink={ink()} language={language()} /></If>
         <If when={port() === "ai"}><AiMotion id={p.entry.id} ink={ink()} language={language()} /></If>
+        <If when={port() === "aiStudio"}><AiStudio id={p.entry.id} ink={ink()} language={language()} /></If>
         <If when={!port()}><Type tone="muted">{t().pending}</Type></If>
       </View>
       <View style={horizontal}>
@@ -135,12 +192,7 @@ export function Gallery(props: { initialLanguage: Language }) {
             </View>
             <Type size={mobile() ? 16 : 18} strong>{t().title}</Type>
           </View>
-          <View style={horizontal}>
-            <Chip label="English" active={!zh()} press={() => language.set("en")} />
-            <Chip label="中文" active={zh()} press={() => language.set("zh")} />
-            <Chip label={appearance() === "dark" ? t().light : t().dark}
-              press={() => appearance.update(value => value === "dark" ? "light" : "dark")} />
-          </View>
+          <HeaderActions />
         </View>
         <View style={{
           flexDirection: narrow() ? "column" : "row", alignItems: "stretch", gap: 17,
@@ -155,7 +207,6 @@ export function Gallery(props: { initialLanguage: Language }) {
             <Type tone="muted" size={16} style={{ maxWidth: 470 }}>{t().intro}</Type>
             <View style={{ ...horizontal, gap: 13, marginTop: 4 }}>
               <MotionButton entry={deploy} label={name(deploy)} ink={ink()} testID="hero-demo" onPress={() => notice.set("hero")} />
-              <TextLink href={repository} label={t().github} />
             </View>
             <Type size={13} tone="accent">{notice() === "hero"
               ? zh() ? "已触发交互" : "Interaction triggered"

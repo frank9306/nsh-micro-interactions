@@ -1,0 +1,14 @@
+const host=globalThis.__nsh_browser_realm.modules;
+let e0=host.get("nsh")["Canvas"];export{e0 as "Canvas"};
+let e1=host.get("nsh")["Clipboard"];export{e1 as "Clipboard"};
+let e2=host.get("nsh")["Path2D"];export{e2 as "Path2D"};
+let e3=host.get("nsh")["Picker"];export{e3 as "Picker"};
+let e4=host.get("nsh")["cleanup"];export{e4 as "cleanup"};
+let e5=host.get("nsh")["createAnimatedValue"];export{e5 as "createAnimatedValue"};
+let e6=host.get("nsh")["effect"];export{e6 as "effect"};
+let e7=host.get("nsh")["mount"];export{e7 as "mount"};
+let e8=host.get("nsh")["reduceMotion"];export{e8 as "reduceMotion"};
+let e9=host.get("nsh")["signal"];export{e9 as "signal"};
+let e10=host.get("nsh")["untracked"];export{e10 as "untracked"};
+let e11=host.get("nsh")["windowSize"];export{e11 as "windowSize"};
+globalThis.__nsh_browser_realm.watch(()=>{e0=host.get("nsh")["Canvas"];e1=host.get("nsh")["Clipboard"];e2=host.get("nsh")["Path2D"];e3=host.get("nsh")["Picker"];e4=host.get("nsh")["cleanup"];e5=host.get("nsh")["createAnimatedValue"];e6=host.get("nsh")["effect"];e7=host.get("nsh")["mount"];e8=host.get("nsh")["reduceMotion"];e9=host.get("nsh")["signal"];e10=host.get("nsh")["untracked"];e11=host.get("nsh")["windowSize"];});
