@@ -8,12 +8,14 @@ root = Path(__file__).resolve().parent.parent
 inventory = (root / "inventory.ts").read_text(encoding="utf-8")
 rows = json.loads(inventory.split("Entry[] = ", 1)[1].strip().removesuffix(";"))
 nodes = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-names = {name for entry in rows for name in entry.get("icons", [])} | {"sparkles", "sun", "moon", "languages", "search", "external-link", "arrow-left", "arrow-right"}
+names = {name for entry in rows for name in entry.get("icons", [])} | {"sparkles", "sun", "moon", "languages", "search", "external-link", "arrow-left", "arrow-right", "thumbs-down"}
 
 
 def svg_path(kind, node):
     if kind == "path":
-        return node["d"]
+        path = node["d"]
+        # Each SVG path starts at the origin. Keep that origin when combining paths.
+        return "M0 0" + path if path.startswith("m") else path
     if kind == "line":
         return f"M{node['x1']} {node['y1']}L{node['x2']} {node['y2']}"
     if kind in {"polyline", "polygon"}:

@@ -1,8 +1,9 @@
-import { Button, Input } from "nsh/base";
+import { Button } from "nsh/base";
 import { Canvas, Path2D, Text, View, cleanup, createAnimatedValue, reduceMotion, signal, type ViewStyle } from "nsh";
 import type { Ink, Language } from "../model";
 import { Glyph } from "./ButtonMotion";
 import { MotionStage } from "./MotionStage";
+import { SearchField } from "./Controls";
 
 export const actionMorphNames = new Set(["add-to-cart-morph", "play-pause-morph", "search-expand", "shapes-heart-morph"]);
 const row: ViewStyle = { flexDirection: "row", alignItems: "center", gap: 8 };
@@ -83,17 +84,12 @@ export function ActionMorph(p: { id: string; label: string; ink: Ink; language: 
   }
   if (p.id === "search-expand") {
     const search = () => zh() ? "搜索组件" : "Search components";
-    return <View class="transition-all duration-300 motion-reduce:transition-none"
-      style={{ ...shell(), minHeight: 46, width: on() ? 234 : 46, paddingHorizontal: 0, overflow: "hidden" }}>
-      <Tap label={zh() ? "展开搜索栏" : "Expand search bar"} press={() => animate(true)} icon="search" iconOnly />
-      <If when={on()}>
-        <Input ref={ref => ref.focus()} accessibilityLabel={zh() ? "输入搜索词" : "Enter search term"} placeholder={search()}
-          value={query()} onChange={({ value }) => query.set(value)}
-          style={{ flex: 1, minWidth: 0, fontSize: 14, color: p.ink.text }} />
-        <Tap label={query() ? (zh() ? "清空搜索" : "Clear search") : (zh() ? "关闭搜索栏" : "Collapse search bar")}
-          press={() => { if (query()) query.set(""); else animate(false); }} icon="x" iconOnly />
-      </If>
-    </View>;
+    return <SearchField ink={p.ink} collapsed={!on()} onExpand={() => animate(true)} onCollapse={() => animate(false)}
+      label={on() ? (zh() ? "输入搜索词" : "Enter search term") : (zh() ? "展开搜索栏" : "Expand search bar")}
+      placeholder={search()} clearLabel={zh() ? "清空搜索" : "Clear search"}
+      closeLabel={zh() ? "关闭搜索栏" : "Collapse search bar"}
+      value={query()} onChange={query.set} focusOnMount
+      style={{ minHeight: 46, width: on() ? 234 : 46 }} />;
   }
   const bounded = (n: number) => Math.min(1, Math.max(0, n));
   return <Each of={[restart()]}>{() => <MotionStage label={p.label} ink={p.ink} language={p.language}>{time =>

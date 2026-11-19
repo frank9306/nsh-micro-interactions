@@ -1,6 +1,7 @@
-import { Button, Menu, MenuItem, Select, Switch, Tab, Tabs } from "nsh/base";
+import { Button, Select, Switch, Tab, Tabs } from "nsh/base";
 import { Text, View, createAnimatedValue, reduceMotion, signal, type ViewStyle } from "nsh";
 import { Glyph } from "./ButtonMotion";
+import { ActionMenu, ControlButton } from "./Controls";
 import type { Ink, Language } from "../model";
 
 export const uiNames = new Set(["ui-context-menu", "ui-category-select", "ui-ab-tabs", "ui-date-position",
@@ -26,21 +27,14 @@ export function UiMotion(p: { id: string; ink: Ink; language: Language }) {
     return <Text style={{ color: props.accent ? p.ink.accent : p.ink.text, fontSize: 14, fontWeight: "650" }}>{props.text}</Text>;
   }
   function ChoiceButton(props: { label: string; press: () => void; selected?: boolean }) {
-    return <Button accessibilityLabel={props.label} selected={props.selected} onPress={props.press}
-      class="focus-visible:outline-2" focusVisibleStyle={{ outlineWidth: 2, outlineColor: p.ink.accent }}
-      style={{ ...pill(), backgroundColor: props.selected ? p.ink.tint : p.ink.panel }}>
-      <Copy text={props.label} accent={props.selected} />
-    </Button>;
+    return <ControlButton label={props.label} ink={p.ink} selected={props.selected} onPress={props.press} />;
   }
 
   if (p.id === "ui-context-menu") {
     return <View style={{ alignItems: "center", gap: 12 }}>
-      <Menu trigger={<View accessibilityLabel={zh() ? "更多操作" : "Actions"} style={pill()}><Copy text={zh() ? "更多操作" : "Actions"} /></View>}
-        popupStyle={popup()}>
-        {([["Edit", "编辑"], ["Delete", "删除"]] as const).map(item => <MenuItem accessibilityLabel={item[zh() ? 1 : 0]}
-          onSelect={() => note.set(item[0])} style={{ padding: 9, borderRadius: 7 }}
-          focusStyle={{ backgroundColor: p.ink.tint }}><Copy text={item[zh() ? 1 : 0]} /></MenuItem>)}
-      </Menu>
+      <ActionMenu label={zh() ? "更多操作" : "Actions"} ink={p.ink}
+        items={[{ id: "Edit", label: zh() ? "编辑" : "Edit" }, { id: "Delete", label: zh() ? "删除" : "Delete" }]}
+        onSelect={note.set} />
       <If when={note()}><Copy text={zh() ? (note() === "Edit" ? "已选择编辑" : "已选择删除") : `Selected ${note()}`} /></If>
     </View>;
   }

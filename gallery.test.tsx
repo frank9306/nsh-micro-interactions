@@ -29,6 +29,16 @@ test("opens in Chinese from the localized entry", async () => {
   expect(app.texts()).not.toContain("Original preview");
 });
 
+test("search uses the matching preview and can be cleared from the field", async () => {
+  const app = await open("./App.tsx");
+  await app.setViewport(1180, 820);
+  await app.type("label:Search components", "add-to-cart-morph");
+  await app.waitFor("Add to cart");
+  await app.press("label:Clear search");
+  await app.waitFor("Component catalog");
+  expect(app.shows("Clear search")).toBe(false);
+});
+
 test("cart morph and AI prompt previews preserve live state", async () => {
   const app = await open("./App.tsx");
   await app.setViewport(1180, 820);

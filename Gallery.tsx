@@ -1,5 +1,4 @@
 import { Scroll, Text, View, signal, windowSize, type JSX, type TextStyle, type ViewStyle } from "nsh";
-import { Button, Input, Link, Menu, MenuItem } from "nsh/base";
 import { Head } from "nsh/web";
 import { inventory, portFor } from "./catalog";
 import { repository, themes, type Entry, type Language } from "./model";
@@ -23,6 +22,7 @@ import { PrimitiveMotion } from "./ports/PrimitiveMotion";
 import { PhysicsMotion } from "./ports/PhysicsMotion";
 import { UiMore } from "./ports/UiMore";
 import { ShapeStudio } from "./ports/ShapeStudio";
+import { ActionMenu, ControlButton, ControlLink, SearchField } from "./ports/Controls";
 
 const ready = inventory.filter(entry => portFor(entry));
 const deploy = ready.find(entry => entry.id === "btn-3")!;
@@ -61,13 +61,11 @@ export function Gallery(props: { initialLanguage: Language }) {
       && (!needle || `${name(entry)} ${entry.name} ${entry.id} ${familyName(entry.family)}`.toLocaleLowerCase().includes(needle)));
   };
   const pageEntries = () => matches().slice(index() * pageSize, (index() + 1) * pageSize);
-  const current = () => inventory.find(entry => entry.id === selected()) ?? deploy;
+  const current = () => pageEntries().find(entry => entry.id === selected()) ?? pageEntries()[0];
 
   function updateGroup(value: string) {
     group.set(value);
     index.set(0);
-    const candidate = matches()[0];
-    if (candidate) selected.set(candidate.id);
     notice.set("");
   }
 
@@ -83,68 +81,25 @@ export function Gallery(props: { initialLanguage: Language }) {
     }}>{p.children}</Text>;
   }
 
-  function Chip(p: { label: string; press: () => void; active?: boolean; muted?: boolean; disabled?: boolean }) {
-    return <Button accessibilityLabel={p.label} onPress={p.press} selected={p.active} disabled={p.disabled}
-      class="focus-visible:outline-2 disabled:opacity-50"
-      focusVisibleStyle={{ outlineWidth: 2, outlineOffset: 2, outlineColor: ink().accent }}
-      hoverStyle={{ borderColor: ink().accent }}
-      style={{
-        minHeight: 36, borderWidth: 1, borderRadius: 20, paddingHorizontal: 13, justifyContent: "center",
-        borderColor: p.active ? ink().accent : ink().border, backgroundColor: p.active ? ink().tint : ink().panel,
-      }}><Type size={13} tone={p.active ? "accent" : p.muted ? "muted" : "text"} strong>{p.label}</Type></Button>;
-  }
-
-  function TextLink(p: { href: string; label: string }) {
-    return <Link href={p.href} accessibilityLabel={p.label}
-      class="focus-visible:outline-2" focusVisibleStyle={{ outlineWidth: 2, outlineColor: ink().accent }}
-      style={{ ...horizontal, minHeight: 34, paddingHorizontal: 10, borderRadius: 8, gap: 6 }}>
-      <Type size={13} strong tone="accent">{p.label}</Type><Glyph name="external-link" color={ink().accent} size={12} />
-    </Link>;
-  }
-
   function HeaderActions() {
     const themeLabel = () => appearance() === "dark"
       ? (zh() ? "切换到浅色主题" : "Switch to light theme")
       : (zh() ? "切换到深色主题" : "Switch to dark theme");
-    const languageLabel = () => zh() ? "语言" : "Language";
-    const iconStyle = (): ViewStyle => ({
-      width: 41, height: 41, alignItems: "center", justifyContent: "center",
-      borderWidth: 1, borderColor: ink().border, backgroundColor: ink().panel, borderRadius: 22,
-    });
-    const ring = () => ({ outlineWidth: 2, outlineOffset: 2, outlineColor: ink().accent });
-    const hover = () => ({ backgroundColor: ink().tint, borderColor: ink().accent });
-    const locales = [{ id: "en" as const, caption: "English" }, { id: "zh" as const, caption: "简体中文" }];
     return <View style={{ ...horizontal, gap: 7, flexWrap: "nowrap" }}>
-      <Link href={repository} accessibilityLabel={t().github} title={t().github}
-        style={iconStyle()} class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
-        <Glyph name="github" color={ink().text} />
-      </Link>
-      <Menu align="end" offset={7} popupStyle={{ minWidth: 136, padding: 4, borderRadius: 12, borderWidth: 1,
-        borderColor: ink().border, backgroundColor: ink().panel }}
-        trigger={<View accessibilityLabel={languageLabel()} tooltip={languageLabel()} style={iconStyle()}
-          class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}>
-          <Glyph name="languages" color={ink().text} />
-        </View>}>
-        {locales.map(locale => <MenuItem accessibilityLabel={locale.caption} onSelect={() => language.set(locale.id)}
-          focusStyle={hover()} style={{ ...horizontal, flexWrap: "nowrap", minHeight: 36, paddingHorizontal: 10,
-            justifyContent: "space-between", borderRadius: 8 }}>
-          <Type size={14}>{locale.caption}</Type>
-          <If when={language() === locale.id}><Glyph name="check" color={ink().accent} size={14} /></If>
-        </MenuItem>)}
-      </Menu>
-      <Button accessibilityLabel={themeLabel()} tooltip={themeLabel()} style={iconStyle()}
-        class="focus-visible:outline-2" focusVisibleStyle={ring()} hoverStyle={hover()}
-        onPress={() => appearance.update(value => value === "dark" ? "light" : "dark")}>
-        <Glyph name={appearance() === "dark" ? "sun" : "moon"} color={ink().text} />
-      </Button>
+      <ControlLink href={repository} label={t().github} look="icon" icon="github" ink={ink()} />
+      <ActionMenu label={zh() ? "语言" : "Language"} look="icon" icon="languages" align="end" ink={ink()}
+        items={[{ id: "en", label: "English" }, { id: "zh", label: "简体中文" }]} current={language()}
+        onSelect={id => language.set(id === "zh" ? "zh" : "en")} />
+      <ControlButton label={themeLabel()} look="icon" icon={appearance() === "dark" ? "sun" : "moon"} ink={ink()}
+        onPress={() => appearance.update(value => value === "dark" ? "light" : "dark")} />
     </View>;
   }
 
   function Preview(p: { entry: Entry }) {
     const port = () => portFor(p.entry);
     return <View testID={`preview-${p.entry.id}`} style={{
-      flex: 1, minWidth: 0, alignSelf: "stretch", maxWidth: "100%",
-      borderColor: ink().border, borderWidth: 1, backgroundColor: ink().panel, borderRadius: 24,
+      width: "100%", minWidth: 0,
+      borderColor: ink().border, borderWidth: 1, backgroundColor: ink().panel, borderRadius: 21,
       padding: mobile() ? 16 : 23, gap: 15,
     }}>
       <View style={{ ...horizontal, justifyContent: "space-between" }}>
@@ -183,7 +138,8 @@ export function Gallery(props: { initialLanguage: Language }) {
         <If when={!port()}><Type tone="muted">{t().pending}</Type></If>
       </View>
       <View style={horizontal}>
-        <If when={port()}><TextLink href={repository + "/blob/main/ports/" + portFile[port()!] + ".tsx"} label={t().local} /></If>
+        <If when={port()}><ControlLink href={repository + "/blob/main/ports/" + portFile[port()!] + ".tsx"} label={t().local}
+          look="plain" icon="external-link" ink={ink()} /></If>
       </View>
     </View>;
   }
@@ -192,10 +148,10 @@ export function Gallery(props: { initialLanguage: Language }) {
     <Head lang={zh() ? "zh-CN" : "en"} title={t().title} description={t().intro} />
     <Scroll style={{ flex: 1 }}>
       <View style={{
-        width: "100%", maxWidth: 1296, alignSelf: "center", paddingHorizontal: mobile() ? 16 : 33,
-        paddingTop: 23, paddingBottom: 35, gap: mobile() ? 24 : 31,
+        width: "100%", maxWidth: 1296, alignSelf: "center", paddingHorizontal: mobile() ? 14 : 32,
+        paddingTop: mobile() ? 15 : 20, paddingBottom: 35, gap: mobile() ? 22 : 28,
       }}>
-        <View style={{ ...horizontal, justifyContent: "space-between", gap: 15 }}>
+        <View style={{ ...horizontal, justifyContent: "space-between", gap: 9, paddingBottom: 13, borderBottomWidth: 1, borderColor: ink().border }}>
           <View style={horizontal}>
             <View style={{ width: 39, height: 39, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: ink().accent }}>
               <Glyph name="sparkles" color={ink().onAccent} size={22} />
@@ -205,15 +161,14 @@ export function Gallery(props: { initialLanguage: Language }) {
           <HeaderActions />
         </View>
         <View style={{
-          flexDirection: narrow() ? "column" : "row", alignItems: "stretch", gap: 17,
-          padding: mobile() ? 20 : 38, borderRadius: mobile() ? 24 : 32, overflow: "hidden",
+          flexDirection: narrow() ? "column" : "row", alignItems: "center", gap: mobile() ? 16 : 32,
+          padding: mobile() ? 18 : 30, borderRadius: mobile() ? 19 : 26,
           borderWidth: 1, borderColor: ink().border, backgroundColor: ink().panel,
-          backgroundImage: appearance() === "dark" ? "radial-gradient(ellipse at 95% 20%, #433075, #242039 48%, #191824 86%)"
-            : "radial-gradient(ellipse at 95% 20%, #dcd3ff, #f1eafa 52%, #fbfaff 88%)",
+          backgroundImage: appearance() === "dark" ? "radial-gradient(ellipse at 92% 14%, #392863, #201b33 48%, #181723 88%)"
+            : "radial-gradient(ellipse at 92% 14%, #dfd4fc, #f5effc 47%, #ffffff 88%)",
         }}>
-          <View style={{ flex: 1.2, minWidth: 0, gap: 14, justifyContent: "center" }}>
-            <Type tone="accent" size={13} strong style={{ fontFamily: "monospace", letterSpacing: 1.3 }}>NATIVE SHELL / AMICRO</Type>
-            <Type size={mobile() ? 38 : 58} strong style={{ letterSpacing: mobile() ? -1.6 : -2.6, lineHeight: mobile() ? 44 : 64 }}>{t().heading}</Type>
+          <View style={{ flex: narrow() ? undefined : 1, width: narrow() ? "100%" : undefined, minWidth: 0, gap: 12, justifyContent: "center" }}>
+            <Type size={mobile() ? 36 : 62} strong style={{ letterSpacing: mobile() ? -1.6 : -2.7, lineHeight: mobile() ? 42 : 66 }}>{t().heading}</Type>
             <Type tone="muted" size={16} style={{ maxWidth: 470 }}>{t().intro}</Type>
             <View style={{ ...horizontal, gap: 13, marginTop: 4 }}>
               <MotionButton entry={deploy} label={name(deploy)} ink={ink()} testID="hero-demo" onPress={() => notice.set("hero")} />
@@ -222,57 +177,58 @@ export function Gallery(props: { initialLanguage: Language }) {
               ? zh() ? "已触发交互" : "Interaction triggered"
               : `${ready.length} ${t().count} · ${inventory.length} ${t().listed}`}</Type>
           </View>
-          <View style={{ flex: 0.8, minWidth: 0, alignItems: "center", justifyContent: "center" }}>
+          <View style={{ width: narrow() ? "100%" : "40%", minWidth: 0, alignItems: "center", justifyContent: "center",
+            borderRadius: 19, borderWidth: 1, borderColor: ink().border, backgroundColor: ink().stage }}>
             <CardMotion id="card-arc-5" label={zh() ? "展开卡片" : "Spread cards"} ink={ink()} hero />
+            <Type size={12} tone="muted" style={{ marginBottom: 12 }}>{zh() ? "悬停或点击展开卡片" : "Hover or press to spread the cards"}</Type>
           </View>
         </View>
         <View style={{ gap: 13 }}>
           <View style={{ ...horizontal, justifyContent: "space-between", gap: 12 }}>
             <Type size={26} strong>{t().catalog}</Type>
-            <View style={horizontal}>
-              <Chip label={t().verified} active={!showAll()} press={() => toggleInventory(false)} />
-              <Chip label={t().inventory} active={showAll()} press={() => toggleInventory(true)} />
-            </View>
+            <SearchField label={t().search} clearLabel={zh() ? "清空搜索" : "Clear search"} ink={ink()} value={query()}
+              onChange={value => { query.set(value); index.set(0); notice.set(""); }}
+              style={{ width: narrow() ? "100%" : 320, maxWidth: "100%" }} />
           </View>
           <View style={horizontal}>
-            <Chip label={t().all} active={group() === "all"} press={() => updateGroup("all")} />
+            <ControlButton label={t().all} selected={group() === "all"} ink={ink()} onPress={() => updateGroup("all")} />
             {familyOrder.filter(family => (showAll() ? inventory : ready).some(entry => entry.family === family))
-              .map(family => <Chip label={familyName(family)} active={group() === family} press={() => updateGroup(family)} />)}
+              .map(family => <ControlButton label={familyName(family)} selected={group() === family} ink={ink()}
+                onPress={() => updateGroup(family)} />)}
           </View>
-          <Input accessibilityLabel={t().search} placeholder={t().search} value={query()}
-            onChange={({ value }) => { query.set(value); index.set(0); }}
-            class="focus-visible:outline-2" focusStyle={{ borderColor: ink().accent }}
-            style={{
-              minHeight: 43, maxWidth: 400, paddingHorizontal: 14, borderRadius: 11, fontSize: 15,
-              backgroundColor: ink().panel, borderColor: ink().border, borderWidth: 1, color: ink().text,
-            }} />
+          <If when={ready.length !== inventory.length}>
+            <View style={horizontal}>
+              <ControlButton label={t().verified} selected={!showAll()} ink={ink()} onPress={() => toggleInventory(false)} />
+              <ControlButton label={t().inventory} selected={showAll()} ink={ink()} onPress={() => toggleInventory(true)} />
+            </View>
+          </If>
           <View style={{ flexDirection: narrow() ? "column-reverse" : "row", gap: 16, alignItems: "flex-start" }}>
-            <View style={{ width: narrow() ? "100%" : 326, gap: 5 }}>
+            <View style={{ width: narrow() ? "100%" : 312, gap: 6, padding: 9, borderWidth: 1,
+              borderColor: ink().border, backgroundColor: ink().panel, borderRadius: 17 }}>
               <If when={pageEntries().length === 0}><Type tone="muted">{t().noResults}</Type></If>
-              {pageEntries().map(entry => <Button testID={`choose-${entry.id}`} accessibilityLabel={name(entry)} selected={entry.id === selected()}
+              {pageEntries().map(entry => <ControlButton testID={`choose-${entry.id}`} label={name(entry)} selected={entry.id === current()?.id}
+                look="row" ink={ink()}
                 onPress={() => { selected.set(entry.id); notice.set(""); }}
-                class="focus-visible:outline-2" focusVisibleStyle={{ outlineWidth: 2, outlineColor: ink().accent }}
-                hoverStyle={{ borderColor: ink().accent }}
-                style={{
-                  minHeight: 43, borderRadius: 10, flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-                  gap: 6, paddingHorizontal: 12, backgroundColor: entry.id === selected() ? ink().tint : ink().panel,
-                  borderColor: entry.id === selected() ? ink().accent : ink().border, borderWidth: 1,
-                }}>
+                style={{ minHeight: 43 }}>
                 <Type size={14} strong>{name(entry)}</Type>
                 <Type tone="muted" size={12}>{familyName(entry.family)}</Type>
-              </Button>)}
-              <View style={{ ...horizontal, marginTop: 7 }}>
-                <Chip label={t().previous} disabled={index() === 0} press={() => index.update(value => Math.max(0, value - 1))} />
-                <Chip label={t().next} disabled={(index() + 1) * pageSize >= matches().length}
-                  press={() => index.update(value => value + 1)} />
+              </ControlButton>)}
+              <View style={{ ...horizontal, marginTop: 7, justifyContent: "space-between", paddingHorizontal: 2 }}>
+                <ControlButton label={t().previous} look="icon" icon="arrow-left" ink={ink()} disabled={index() === 0}
+                  onPress={() => { index.update(value => Math.max(0, value - 1)); notice.set(""); }} />
+                <Type size={12} tone="muted">{`${matches().length ? index() + 1 : 0} / ${Math.ceil(matches().length / pageSize)}`}</Type>
+                <ControlButton label={t().next} look="icon" icon="arrow-right" ink={ink()} disabled={(index() + 1) * pageSize >= matches().length}
+                  onPress={() => { index.update(value => value + 1); notice.set(""); }} />
               </View>
             </View>
-            <Each of={[current()]}>{entry => <Preview entry={entry()} />}</Each>
+            <If when={current()}><View style={{ flex: narrow() ? undefined : 1, minWidth: 0, width: narrow() ? "100%" : undefined }}>
+              <Each of={current() ? [current()!] : []}>{entry => <Preview entry={entry()} />}</Each>
+            </View></If>
           </View>
         </View>
         <View style={{ ...horizontal, justifyContent: "space-between", paddingTop: 12, borderTopWidth: 1, borderColor: ink().border }}>
           <Type tone="muted" size={13}>{t().attribution}</Type>
-          <TextLink label={t().license} href={repository + "/blob/main/LICENSE"} />
+          <ControlLink label={t().license} href={repository + "/blob/main/LICENSE"} look="plain" ink={ink()} icon="external-link" />
         </View>
       </View>
     </Scroll>

@@ -2,6 +2,7 @@ import { Button, Input, Select } from "nsh/base";
 import { Clipboard, Picker, Text, View, cleanup, signal, type ViewStyle } from "nsh";
 import type { Ink, Language } from "../model";
 import { Glyph } from "./ButtonMotion";
+import { ControlButton } from "./Controls";
 
 export const studioNames = new Set(["ai-prompt-input", "ai-response-stream"]);
 const layout = { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 6 } as const;
@@ -97,27 +98,38 @@ export function AiStudio(p: { id: string; ink: Ink; language: Language }) {
     </View>;
   }
   const summary = () => zh() ? "使用 NSH 创建一个可响应减少动态效果的组件。" : "Create an NSH interaction that follows reduced-motion preferences.";
+  const tools = { flexDirection: "row", alignItems: "center", flexWrap: "nowrap", gap: 4, flexShrink: 0 } as const;
+  const toolSize = { width: 33, minHeight: 33 };
   return <View style={shell()}>
     <Copy text={summary()} />
     <View style={{ borderRadius: 8, backgroundColor: p.ink.stage, padding: 10 }}>
       <Copy code text={generating() ? (zh() ? "正在重播生成…" : "Replaying generation…") : exampleCode[branch()]} />
     </View>
-    <View style={layout}>
-      <Action label={zh() ? "上一条" : "Previous branch"} icon="arrow-left" press={() => branch.update(value => (value + 2) % 3)} />
-      <Copy muted text={`${branch() + 1} / 3`} />
-      <Action label={zh() ? "下一条" : "Next branch"} icon="arrow-right" press={() => branch.update(value => (value + 1) % 3)} />
-      <Action label={zh() ? "复制" : "Copy"} icon="copy" press={() => {
-        void Clipboard.writeText(exampleCode[branch()]).then(
-          () => status.set(zh() ? "已复制" : "Copied"), () => status.set(zh() ? "复制失败" : "Copy unavailable"));
-      }} />
-      <Action label={zh() ? "重新生成" : "Regenerate"} icon="refresh-cw" active={generating()} press={() => {
-        if (work !== undefined) clearTimeout(work);
-        generating.set(true); work = setTimeout(() => generating.set(false), 800);
-      }} />
-      <Action label={zh() ? "有帮助" : "Helpful"} icon="thumbs-up" active={vote() === "up"}
-        press={() => vote.update(value => value === "up" ? "" : "up")} />
-      <Action label={zh() ? "没帮助" : "Not helpful"} active={vote() === "down"}
-        press={() => vote.update(value => value === "down" ? "" : "down")} />
+    <View style={{ ...layout, gap: 8 }} testID="response-toolbar">
+      <View style={tools} testID="response-branches">
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "上一条" : "Previous branch"} icon="arrow-left"
+          onPress={() => branch.update(value => (value + 2) % 3)} />
+        <View style={{ minWidth: 30, alignItems: "center" }}><Copy muted text={`${branch() + 1} / 3`} /></View>
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "下一条" : "Next branch"} icon="arrow-right"
+          onPress={() => branch.update(value => (value + 1) % 3)} />
+      </View>
+      <View style={tools} testID="response-actions">
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "复制" : "Copy"} icon="copy" onPress={() => {
+          void Clipboard.writeText(exampleCode[branch()]).then(
+            () => status.set(zh() ? "已复制" : "Copied"), () => status.set(zh() ? "复制失败" : "Copy unavailable"));
+        }} />
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "重新生成" : "Regenerate"} icon="refresh-cw"
+          selected={generating()} onPress={() => {
+            if (work !== undefined) clearTimeout(work);
+            generating.set(true); work = setTimeout(() => generating.set(false), 800);
+          }} />
+      </View>
+      <View style={tools} testID="response-feedback">
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "有帮助" : "Helpful"} icon="thumbs-up"
+          selected={vote() === "up"} onPress={() => vote.update(value => value === "up" ? "" : "up")} />
+        <ControlButton ink={p.ink} look="icon" style={toolSize} label={zh() ? "没帮助" : "Not helpful"} icon="thumbs-down"
+          selected={vote() === "down"} onPress={() => vote.update(value => value === "down" ? "" : "down")} />
+      </View>
     </View>
     <If when={status()}><Copy muted text={status()} /></If>
   </View>;
