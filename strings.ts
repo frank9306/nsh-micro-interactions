@@ -1,9 +1,9 @@
 export const phrases = {
   en: {
     title: "NSH Micro Interactions", heading: "Motion you can touch.",
-    intro: "An open-source port of Amicro to Native Shell. Explore the interactive samples and follow each component back to its original source.",
+    intro: "An open-source port of Amicro to Native Shell. Try the interactive examples and explore their NSH implementations.",
     count: "NSH previews", listed: "indexed upstream entries", github: "GitHub repository",
-    source: "Original source", demo: "Original preview", local: "NSH implementation", search: "Search components",
+    local: "NSH implementation", search: "Search components",
     catalog: "Component catalog", all: "All", verified: "Available demos", inventory: "Full inventory",
     previous: "Previous", next: "Next", noResults: "No components match this search.",
     pending: "NSH port pending", open: "View component", live: "Interactive preview",
@@ -13,9 +13,9 @@ export const phrases = {
   },
   zh: {
     title: "NSH 微交互组件库", heading: "让组件动起来",
-    intro: "把 Amicro 的公开组件移植到 Native Shell。可以现场试交互，也可以打开每个组件的上游源码。",
+    intro: "把 Amicro 的公开组件移植到 Native Shell。可以现场试交互，也可以查看组件的 NSH 实现。",
     count: "个 NSH 演示", listed: "个上游目录条目", github: "GitHub 仓库",
-    source: "上游源码", demo: "官方预览", local: "NSH 实现", search: "搜索组件",
+    local: "NSH 实现", search: "搜索组件",
     catalog: "组件目录", all: "全部", verified: "可交互演示", inventory: "完整目录",
     previous: "上一页", next: "下一页", noResults: "没有匹配的组件。",
     pending: "NSH 移植待完成", open: "查看组件", live: "交互预览",

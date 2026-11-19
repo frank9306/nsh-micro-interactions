@@ -2,7 +2,7 @@ import { Scroll, Text, View, signal, windowSize, type JSX, type TextStyle, type 
 import { Button, Input, Link } from "nsh/base";
 import { Head } from "nsh/web";
 import { inventory, portFor } from "./catalog";
-import { repository, themes, upstream, type Entry, type Language } from "./model";
+import { repository, themes, type Entry, type Language } from "./model";
 import { componentName, families, phrases } from "./strings";
 import { Glyph, MotionButton } from "./ports/ButtonMotion";
 import { CardMotion } from "./ports/CardMotion";
@@ -116,8 +116,6 @@ export function Gallery(props: { initialLanguage: Language }) {
         <If when={!port()}><Type tone="muted">{t().pending}</Type></If>
       </View>
       <View style={horizontal}>
-        <TextLink href={upstream + p.entry.source} label={t().source} />
-        <If when={p.entry.preview}><TextLink href={p.entry.preview!} label={t().demo} /></If>
         <If when={port()}><TextLink href={repository + "/blob/main/ports/" + portFile[port()!] + ".tsx"} label={t().local} /></If>
       </View>
     </View>;

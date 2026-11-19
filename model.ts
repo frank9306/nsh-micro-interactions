@@ -21,7 +21,6 @@ export type Entry = {
   ink?: string | null;
 };
 
-export const upstream = "https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/fa5f8ffbe39537a8db191806066b8773c47c82e9/";
 export const repository = "https://github.com/frank9306/nsh-micro-interactions";
 export const themes: Record<"dark" | "light", Ink> = {
   dark: { background: "#10101a", panel: "#161625", stage: "#1d1c30", border: "#33314a",

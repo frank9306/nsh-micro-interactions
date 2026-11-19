@@ -2,7 +2,7 @@
 
 [简体中文](README.zh-CN.md) · [Interactive gallery](https://frank9306.github.io/nsh-micro-interactions/)
 
-Native Shell ports of the public Amicro micro-interactions. The interactive gallery offers English and Simplified Chinese, light and dark themes, a searchable upstream inventory, and source links for each example.
+Native Shell ports of the public Amicro micro-interactions. The interactive gallery offers English and Simplified Chinese, light and dark themes, a searchable upstream inventory, and links to the NSH implementation.
 
 This is an independent port in progress. The gallery distinguishes working NSH previews from pending entries. A pending entry is an upstream reference. The inventory is derived from the upstream sitemap, public registry and demo catalogs, including separately listed variants.
 

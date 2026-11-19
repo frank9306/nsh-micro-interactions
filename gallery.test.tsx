@@ -9,6 +9,8 @@ test("switches language and shows a real Amicro button preview", async () => {
   await app.press("id:hero-demo");
   await app.waitFor("已触发交互");
   expect(app.shows("组件目录")).toBe(true);
+  expect(app.texts()).not.toContain("上游源码");
+  expect(app.texts()).not.toContain("官方预览");
 });
 
 test("opens in Chinese from the localized entry", async () => {
@@ -16,4 +18,6 @@ test("opens in Chinese from the localized entry", async () => {
   await app.waitFor("让组件动起来");
   await app.press("label:English");
   await app.waitFor("Motion you can touch.");
+  expect(app.texts()).not.toContain("Original source");
+  expect(app.texts()).not.toContain("Original preview");
 });

@@ -2,7 +2,7 @@
 
 [English](README.md) · [在线交互展台](https://frank9306.github.io/nsh-micro-interactions/zh/)
 
-使用 Native Shell 移植 Amicro 的公开微交互组件。展台支持简体中文、英文和深浅色，目录可以搜索，每项都可以跳转查看上游来源。
+使用 Native Shell 移植 Amicro 的公开微交互组件。展台支持简体中文、英文和深浅色，可搜索组件目录并查看已移植组件的 NSH 实现。
 
 这是持续移植中的独立项目。展台会区分可交互的 NSH 示例和待移植条目。组件目录来自上游站点地图、公开注册表与各分类的演示清单，包含单独列出的组件变体。
 
