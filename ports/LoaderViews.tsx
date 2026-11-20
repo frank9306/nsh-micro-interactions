@@ -17,6 +17,18 @@ export type LoaderNode = {
   children?: (LoaderNode | string)[];
 };
 
+export function localizeLoader(node: LoaderNode, id: string): LoaderNode {
+  const letters = id === "spring-text-pop" ? [..."内容正在加载中..."]
+    : id === "text-shimmer-wave" ? [..."正在思考请稍等…"] : undefined;
+  const words: Record<string, string> = { Loading: "加载中", Thinking: "思考中", Wait: "请稍候", "loading...": "加载中…", "&gt;": ">" };
+  let index = 0;
+  function visit(value: LoaderNode): LoaderNode {
+    return { ...value, children: value.children?.map(child => typeof child === "string"
+      ? letters?.[index++] ?? words[child] ?? child : visit(child)) };
+  }
+  return visit(node);
+}
+
 function curve(value: number, timing: Timing) {
   const { ease } = timing;
   if (timing.type === "spring" && value !== 0 && value !== 1) {
@@ -84,6 +96,13 @@ function styleFor(node: LoaderNode, time: number, ink: Ink): ViewStyle {
   }
   if (classes.some(value => /^(?:dark:)?bg-(?:white|black|zinc-\d+|neutral-\d+)$/.test(value))) {
     style.backgroundColor = classes.some(value => /^bg-(?:zinc|neutral)-[123]00$/.test(value)) ? ink.border : ink.accent;
+  }
+  const edges = { t: "borderTopColor", r: "borderRightColor", b: "borderBottomColor", l: "borderLeftColor" } as const;
+  for (const name of classes) {
+    const match = /^border-(?:([trbl])-)?(?:zinc-\d+|neutral-\d+|black|white)(?:\/(\d+))?$/.exec(name);
+    if (!match) continue;
+    const edge = match[1] as keyof typeof edges | undefined;
+    style[edge ? edges[edge] : "borderColor"] = match[2] ? ink.muted : ink.accent;
   }
   if (!node.animation) return style;
   const transforms: NonNullable<ViewStyle["transform"]> = [];

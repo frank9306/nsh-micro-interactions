@@ -12,6 +12,15 @@ const modes: Record<string, string> = {
 export const chartNames = new Set(Object.keys(modes));
 const sample = [34, 49, 42, 67, 59, 80, 71, 87];
 const tau = 2 * Math.PI;
+const donutCenterY = 72;
+const donutSegments = [0, 0.35, 0.61, 0.84, 1];
+const horizontalRows = { first: 15, spacing: 15 };
+const funnelRows = { first: 19, spacing: 20 };
+const heatmapRows = { first: 30, spacing: 14 };
+
+function closestRow(y: number, rows: { first: number; spacing: number }, max: number) {
+  return Math.max(0, Math.min(max, Math.round((y - rows.first) / rows.spacing)));
+}
 
 export function ChartMotion(p: { id: string; label: string; ink: Ink; language: Language }) {
   const kind = modes[p.id];
@@ -20,26 +29,34 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
     : kind === "funnel" || kind === "pyramid" ? 5 : sample.length - 1;
   const selected = signal(Math.min(max, 4));
   const horizontal = signal(false);
+  const measuredWidth = signal(0);
   const w = () => windowSize().width < 430 ? 256 : 336;
   const h = 142;
   const zh = () => p.language === "zh";
   const accent = () => p.id.endsWith("-green") ? "#43c996" : p.id.endsWith("-blue") ? "#42a9e4" : p.ink.accent;
 
   function mouseIndex(x: number, y: number) {
-    const width = w();
+    const width = measuredWidth() || w();
     if (kind === "heatmap") {
       const cols = activity ? 20 : 12;
-      return Math.min(max, Math.max(0, Math.floor((x - 12) / ((width - 24) / cols))) * 7 + Math.max(0, Math.min(6, Math.floor((y - 24) / 14))));
+      const column = Math.max(0, Math.min(cols - 1, Math.floor((x - 12) / ((width - 24) / cols))));
+      return column * 7 + closestRow(y, heatmapRows, 6);
     }
-    if (kind === "donut") return Math.min(3, Math.floor((((Math.atan2(y - h / 2, x - width / 2) + Math.PI / 2) % tau + tau) % tau) / (tau / 4)));
+    if (kind === "donut") {
+      const bearing = Math.atan2(y - donutCenterY, x - width / 2) + Math.PI / 2;
+      const turn = ((bearing % tau + tau) % tau) / tau;
+      return donutSegments.findIndex(end => turn < end) - 1;
+    }
+    if (kind === "bar" && horizontal()) return closestRow(y, horizontalRows, max);
+    if (kind === "funnel" || kind === "pyramid") return closestRow(y, funnelRows, max);
     return Math.max(0, Math.min(max, Math.round((x - 18) / ((width - 36) / max))));
   }
 
   return <View style={{ alignItems: "center", alignSelf: "stretch", gap: 7 }}>
     <Canvas accessibilityLabel={p.label}
+      onLayout={({ bounds }) => measuredWidth.set(bounds.size.width)}
       onMouseMove={event => selected.set(mouseIndex(event.position.x, event.position.y))}
-      style={{ width: w(), height: h, maxWidth: "100%" }} draw={ctx => {
-        const width = w();
+      style={{ width: w(), height: h, maxWidth: "100%" }} draw={(ctx, { width }) => {
         const index = selected();
         const color = accent();
         const xs = sample.map((_, i) => 18 + i * ((width - 36) / (sample.length - 1)));
@@ -60,7 +77,7 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
           const size = (width - 24) / cols;
           for (let i = 0; i < cols * 7; i++) {
             const x = 12 + Math.floor(i / 7) * size + size / 2;
-            const y = 30 + (i % 7) * 14;
+            const y = heatmapRows.first + (i % 7) * heatmapRows.spacing;
             ctx.globalAlpha = i === index ? 1 : (0.14 + ((i * 53 + Math.floor(i / 6) * 37) % 15) / 20);
             point(x, y, Math.min(5.3, size * 0.38));
           }
@@ -70,7 +87,7 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
           const start = kind === "donut" ? -Math.PI / 2 : Math.PI;
           const fraction = kind === "donut" ? 1 : 0.5;
           const cx = width / 2;
-          const cy = kind === "donut" ? 72 : 101;
+          const cy = kind === "donut" ? donutCenterY : 101;
           const r = kind === "donut" ? 45 : 69;
           ctx.lineWidth = 13;
           if (kind === "gauge") {
@@ -79,11 +96,10 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
             ctx.globalAlpha = 1;
             ctx.beginPath(); ctx.arc(cx, cy, r, start, start + Math.PI * sample[index] / 100); ctx.stroke();
           } else {
-            const segments = [0, 0.35, 0.61, 0.84, 1];
             for (let i = 0; i < 4; i++) {
               ctx.globalAlpha = i === index ? 1 : 0.29 + i * 0.12;
               ctx.beginPath();
-              ctx.arc(cx, cy, r, start + tau * fraction * segments[i] + 0.15, start + tau * fraction * segments[i + 1] - 0.15);
+              ctx.arc(cx, cy, r, start + tau * fraction * donutSegments[i] + 0.15, start + tau * fraction * donutSegments[i + 1] - 0.15);
               ctx.stroke();
             }
           }
@@ -96,7 +112,7 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
         if (kind === "funnel" || kind === "pyramid") {
           for (let i = 0; i < 6; i++) {
             const span = (kind === "funnel" ? 6 - i : i + 2) * (width - 45) / 8;
-            const y = 19 + i * 20;
+            const y = funnelRows.first + i * funnelRows.spacing;
             const x = kind === "funnel" ? 26 : (width - span) / 2;
             ctx.globalAlpha = i === index ? 1 : 0.26 + i * 0.11;
             line(x, y, x + span, y, 11);
@@ -108,7 +124,10 @@ export function ChartMotion(p: { id: string; label: string; ink: Ink; language: 
         if (kind === "bar" || kind === "hybrid") {
           for (const [i, pointX] of xs.entries()) {
             ctx.globalAlpha = i === index ? 1 : kind === "hybrid" ? 0.36 : 0.62;
-            if (horizontal()) line(18, 15 + i * 15, 18 + sample[i] * (width - 43) / 100, 15 + i * 15, 8);
+            if (horizontal()) {
+              const y = horizontalRows.first + i * horizontalRows.spacing;
+              line(18, y, 18 + sample[i] * (width - 43) / 100, y, 8);
+            }
             else line(pointX, 119, pointX, ys[i], 11);
           }
           if (kind === "bar") return;

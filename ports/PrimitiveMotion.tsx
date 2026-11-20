@@ -16,6 +16,7 @@ export function PrimitiveMotion(p: { id: string; label: string; ink: Ink; langua
   const trace = signal<{ x: number; y: number }[]>([]);
   const location = signal({ x: 98, y: 51 });
   const inside = signal(false);
+  const sample = signal(false);
   const theme = () => ({ color: p.ink.text, fontSize: 14, fontWeight: "650" as const });
   const ring = () => ({ outlineWidth: 2, outlineColor: p.ink.accent, outlineOffset: 2 });
   function move(value: typeof x, next: number) {
@@ -29,12 +30,14 @@ export function PrimitiveMotion(p: { id: string; label: string; ink: Ink; langua
     if (p.id === "cursor-trail") trace.update(items => [...items.slice(-17), point]);
   }
   if (["cursor-trail", "mouse-follow", "spotlight"].includes(p.id)) {
-    return <View onMouseEnter={track} onMouseMove={track}
+    const sampleLabel = () => sample() ? (zh() ? "重置示例" : "Reset sample") : (zh() ? "显示示例" : "Show sample");
+    return <View style={{ alignItems: "center", gap: 8 }}>
+      <View onMouseEnter={track} onMouseMove={track}
       onMouseLeave={() => { inside.set(false); trace.set([]); }}
       style={{ width: 200, height: 104, overflow: "hidden", backgroundColor: p.ink.panel, borderRadius: 14, borderWidth: 1, borderColor: p.ink.border }}>
       <Canvas accessibilityLabel={p.label} style={{ width: 200, height: 104 }} draw={ctx => {
-        if (!inside()) return;
-        const point = location();
+        if (!inside() && !sample()) return;
+        const point = inside() ? location() : { x: 100, y: 52 };
         if (p.id === "spotlight") {
           const glow = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 75);
           glow.addColorStop(0, p.ink.accent);
@@ -42,13 +45,20 @@ export function PrimitiveMotion(p: { id: string; label: string; ink: Ink; langua
           ctx.fillStyle = glow; ctx.globalAlpha = 0.65; ctx.fillRect(0, 0, 200, 104);
           return;
         }
-        const points = p.id === "cursor-trail" && !reduceMotion() ? trace() : [point];
+        const points = p.id === "cursor-trail" && !reduceMotion()
+          ? (inside() ? trace() : [{ x: 65, y: 66 }, { x: 80, y: 59 }, point]) : [point];
         ctx.fillStyle = p.ink.accent;
         points.forEach(({ x, y }, i) => {
           ctx.beginPath(); ctx.globalAlpha = (i + 1) / points.length;
           ctx.arc(x, y, p.id === "mouse-follow" ? 9 : (i + 2) * 0.45, 0, 2 * Math.PI); ctx.fill();
         });
       }} />
+      </View>
+      <Button accessibilityLabel={sampleLabel()} selected={sample()} onPress={() => sample.update(value => !value)}
+        class="focus-visible:outline-2" focusVisibleStyle={ring()}
+        style={{ minHeight: 36, borderRadius: 18, paddingHorizontal: 12, justifyContent: "center", backgroundColor: p.ink.panel }}>
+        <Text style={theme()}>{sampleLabel()}</Text>
+      </Button>
     </View>;
   }
   if (["progress-indicator", "scroll-reveal", "sticky-reveal"].includes(p.id)) {

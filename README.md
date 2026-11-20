@@ -6,6 +6,12 @@ Native Shell ports of the public Amicro micro-interactions. The interactive gall
 
 This independent port has an NSH preview for every entry in the pinned catalog. The inventory is derived from the upstream sitemap, public registry and demo catalogs, including separately listed variants. Charts use demo data and the AI interface samples simulate responses locally.
 
+## Use in an app
+
+The public source entry provides an animated button, a controlled select, and a line chart that accepts caller data. See the [integration guide](COMPONENTS.md), [consumer example](examples/Consumer.tsx), and [changelog](CHANGELOG.md).
+
+See the [verification record](VERIFICATION.md) for isolated consumer and packaged-Web checks. Use `python scripts/build-pages.py --out .nsh/local-site` to build both languages into a new directory while preserving the current `docs/` output.
+
 ## Run locally
 
 Install [NSH 0.6](https://nsh.dev/), then run:

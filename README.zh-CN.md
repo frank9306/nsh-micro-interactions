@@ -6,6 +6,12 @@
 
 这是一个独立移植项目，固定版本目录中的每一项都有 NSH 演示。组件目录来自上游站点地图、公开注册表与各分类的演示清单，包含单独列出的组件变体。图表使用演示数据，AI 界面在本地模拟响应。
 
+## 接入项目
+
+公开源码入口提供动画按钮、受控选择器和可传入业务数据的折线图。参见[接入说明](COMPONENTS.md)、[示例](examples/Consumer.tsx)与[变更记录](CHANGELOG.md)。
+
+独立消费者与实际 Web 包的检查见[验收记录](VERIFICATION.md)。使用 `python scripts/build-pages.py --out .nsh/local-site` 可在新目录构建双语展台，保留当前 `docs/` 产物。
+
 ## 本地运行
 
 安装 [NSH 0.6](https://nsh.dev/) 后执行：

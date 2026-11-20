@@ -1,4 +1,4 @@
-import { Scroll, Text, View, signal, windowSize, type JSX, type TextStyle, type ViewStyle } from "nsh";
+import { Clipboard, Scroll, Text, View, signal, windowSize, type JSX, type TextStyle, type ViewStyle } from "nsh";
 import { Head } from "nsh/web";
 import { inventory, portFor } from "./catalog";
 import { repository, themes, type Entry, type Language } from "./model";
@@ -23,6 +23,38 @@ import { PhysicsMotion } from "./ports/PhysicsMotion";
 import { UiMore } from "./ports/UiMore";
 import { ShapeStudio } from "./ports/ShapeStudio";
 import { ActionMenu, ControlButton, ControlLink, SearchField } from "./ports/Controls";
+import { SeriesChart } from "./index";
+
+const chartExample = [{ label: "Mon", value: 34 }, { label: "Tue", value: 49 }, { label: "Wed", value: 42 }];
+const usage: Record<string, string> = {
+  "btn-3": `import { mount } from "nsh";
+import { AnimatedButton, themes } from "./micro-interactions";
+
+mount(() => <AnimatedButton label="Deploy" ink={themes.light}
+  effect="morph" icons={["cloud", "cloud-upload"]} onPress={() => console.log("Deploy")} />);`,
+  "ui-category-select": `import { mount, signal } from "nsh";
+import { MotionSelect, themes } from "./micro-interactions";
+
+function App() {
+  const value = signal<string | null>(null);
+  return <MotionSelect label="Category" placeholder="Choose a category"
+    ink={themes.light} options={[{ value: "docs", label: "Docs" }]}
+    value={value()} onChange={value.set} />;
+}
+mount(() => <App />);`,
+  "mono-rounded-line": `import { mount } from "nsh";
+import { SeriesChart, themes } from "./micro-interactions";
+
+mount(() => <SeriesChart label="Orders" emptyLabel="No data" ink={themes.light}
+  data={${JSON.stringify(chartExample)}} />);`,
+};
+
+const chineseUsage: Record<string, string> = {
+  "btn-3": usage["btn-3"].replaceAll("Deploy", "部署"),
+  "ui-category-select": usage["ui-category-select"].replace('label="Category"', 'label="类别"')
+    .replace('placeholder="Choose a category"', 'placeholder="请选择类别"').replace('label: "Docs"', 'label: "文档"'),
+  "mono-rounded-line": usage["mono-rounded-line"].replace('label="Orders" emptyLabel="No data"', 'label="订单" emptyLabel="暂无数据"'),
+};
 
 const ready = inventory.filter(entry => portFor(entry));
 const deploy = ready.find(entry => entry.id === "btn-3")!;
@@ -97,6 +129,19 @@ export function Gallery(props: { initialLanguage: Language }) {
 
   function Preview(p: { entry: Entry }) {
     const port = () => portFor(p.entry);
+    const code = () => (zh() ? chineseUsage : usage)[p.entry.id];
+    const copyStatus = signal<"idle" | "copied" | "failed">("idle");
+    const codeOpen = signal(false);
+
+    async function copyCode() {
+      try {
+        await Clipboard.writeText(code());
+        copyStatus.set("copied");
+      } catch {
+        codeOpen.set(true);
+        copyStatus.set("failed");
+      }
+    }
     return <View testID={`preview-${p.entry.id}`} style={{
       width: "100%", minWidth: 0,
       borderColor: ink().border, borderWidth: 1, backgroundColor: ink().panel, borderRadius: 21,
@@ -140,7 +185,23 @@ export function Gallery(props: { initialLanguage: Language }) {
       <View style={horizontal}>
         <If when={port()}><ControlLink href={repository + "/blob/main/ports/" + portFile[port()!] + ".tsx"} label={t().local}
           look="plain" icon="external-link" ink={ink()} /></If>
+        <If when={code()}><ControlButton label={codeOpen() ? (zh() ? "收起用法" : "Hide usage") : (zh() ? "查看用法" : "View usage")}
+          ink={ink()} selected={codeOpen()} onPress={() => codeOpen.update(open => !open)} /></If>
       </View>
+      <If when={code() && codeOpen()}>
+        <If when={p.entry.id === "mono-rounded-line"}>
+          <SeriesChart label={zh() ? "订单示例" : "Orders example"} emptyLabel={zh() ? "暂无数据" : "No data"}
+            ink={ink()} data={chartExample} />
+        </If>
+        <Type size={13} style={{ fontFamily: "monospace" }}>{code()}</Type>
+        <View style={horizontal}>
+          <ControlButton label={zh() ? "复制代码" : "Copy code"} ink={ink()} onPress={() => { void copyCode(); }} />
+          <ControlLink href={repository + "/blob/main/COMPONENTS.md"} label={zh() ? "接入说明" : "Integration guide"}
+            look="plain" ink={ink()} />
+          <If when={copyStatus() === "copied"}><Type>{zh() ? "已复制" : "Copied"}</Type></If>
+          <If when={copyStatus() === "failed"}><Type>{zh() ? "复制失败，可从接入说明复制" : "Copy failed. Copy from the integration guide."}</Type></If>
+        </View>
+      </If>
     </View>;
   }
 

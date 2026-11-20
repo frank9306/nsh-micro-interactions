@@ -1,7 +1,8 @@
-import { Button, Select, Switch, Tab, Tabs } from "nsh/base";
+import { Button, Switch, Tab, Tabs } from "nsh/base";
 import { Text, View, createAnimatedValue, reduceMotion, signal, type ViewStyle } from "nsh";
 import { Glyph } from "./ButtonMotion";
 import { ActionMenu, ControlButton } from "./Controls";
+import { MotionSelect } from "./MotionSelect";
 import type { Ink, Language } from "../model";
 
 export const uiNames = new Set(["ui-context-menu", "ui-category-select", "ui-ab-tabs", "ui-date-position",
@@ -15,8 +16,6 @@ export function UiMotion(p: { id: string; ink: Ink; language: Language }) {
   const row = { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8 } as const;
   const pill = (): ViewStyle => ({ ...row, minHeight: 39, paddingHorizontal: 14,
     borderRadius: 20, backgroundColor: p.ink.panel, borderColor: p.ink.border, borderWidth: 1 });
-  const popup = (): ViewStyle => ({ minWidth: 152, borderWidth: 1, borderColor: p.ink.border,
-    backgroundColor: p.ink.panel, borderRadius: 12, padding: 4 });
 
   function select(index: number) {
     value.set(index);
@@ -40,11 +39,10 @@ export function UiMotion(p: { id: string; ink: Ink; language: Language }) {
   }
   if (p.id === "ui-category-select") {
     const choices = () => (zh() ? ["全部", "设计", "开发", "文档"] : ["All", "Design", "Development", "Docs"])
-      .map((title, index) => ({ title, value: String(index) }));
-    return <Select accessibilityLabel={zh() ? "类别" : "Category"} items={choices()} value={String(value())}
-      onChange={({ value: next }) => { if (next !== null && next !== undefined) select(Number(next)); }}
-      popupStyle={popup()} itemStyle={{ padding: 8, color: p.ink.text, fontSize: 14 }}
-      trigger={<View style={pill()}><Copy text={choices()[value()].title + "  ⌄"} /></View>} />;
+      .map((label, index) => ({ label, value: String(index) }));
+    return <MotionSelect label={zh() ? "类别" : "Category"} placeholder={zh() ? "选择类别" : "Choose a category"}
+      options={choices()} ink={p.ink} value={String(value())}
+      onChange={next => { if (next !== null) select(Number(next)); }} />;
   }
   if (p.id === "ui-save-pill") {
     return <Button accessibilityLabel={zh() ? (value() ? "已收藏" : "收藏") : (value() ? "Saved" : "Save")}

@@ -23,7 +23,17 @@ export function Glyph(p: { name: string; color: string; fill?: boolean; size?: n
 }
 
 export function MotionButton(p: { entry: Entry; label: string; ink: Ink; onPress?: () => void; testID?: string }) {
-  const effect = p.entry.effect;
+  return <AnimatedButton label={p.label} ink={p.ink} onPress={p.onPress} testID={p.testID}
+    effect={p.entry.effect} icons={p.entry.icons} effectColor={p.entry.ink ?? undefined} />;
+}
+
+export type AnimatedButtonProps = {
+  label: string; ink: Ink; onPress?: () => void; disabled?: boolean; testID?: string;
+  effect?: string; icons?: readonly string[]; effectColor?: string;
+};
+
+export function AnimatedButton(p: AnimatedButtonProps) {
+  const effect = p.effect;
   const hover = signal(false);
   const held = signal(false);
   const active = signal(false);
@@ -48,9 +58,9 @@ export function MotionButton(p: { entry: Entry; label: string; ink: Ink; onPress
   const haloX = sweep.interpolate({ inputRange: [0, 1], outputRange: [-120, 150] });
   const haloScale = sweep.interpolate({ inputRange: [0, 1], outputRange: [1, 1.15] });
   const haloAlpha = sweep.interpolate({ inputRange: [0, 0.1, 1], outputRange: [0, 0.85, 0] });
-  const both = ["morph", "color-morph", "sparkle", "ring", "slide-arrow"].includes(effect ?? "") && p.entry.icons?.length === 2;
-  const first = p.entry.icons?.[0] ?? "sparkles";
-  const second = p.entry.icons?.[1] ?? first;
+  const both = ["morph", "color-morph", "sparkle", "ring", "slide-arrow"].includes(effect ?? "") && p.icons?.length === 2;
+  const first = p.icons?.[0] ?? "sparkles";
+  const second = p.icons?.[1] ?? first;
 
   function resizing() {
     if (reduceMotion()) scale.set(1);
@@ -88,12 +98,13 @@ export function MotionButton(p: { entry: Entry; label: string; ink: Ink; onPress
   }
 
   function magnet(event: MouseEvent) {
-    if (effect !== "magnetic" || reduceMotion()) return;
+    if (p.disabled || effect !== "magnetic" || reduceMotion()) return;
     void x.spring((event.position.x - size() / 2) * 0.14, spring);
     void y.spring((event.position.y - 20) * 0.23, spring);
   }
 
   function press() {
+    if (p.disabled) return;
     p.onPress?.();
     if (hover()) return;
     change(true);
@@ -107,12 +118,12 @@ export function MotionButton(p: { entry: Entry; label: string; ink: Ink; onPress
       position: "absolute", top: 0, bottom: 0, left: 0, right: 0, borderColor: p.ink.accent,
       borderWidth: 1, borderRadius: 32, pointerEvents: "none", opacity: haloAlpha, transform: [{ scale: haloScale }],
     }} /></If>
-    <Button accessibilityLabel={p.label} onPress={press} testID={p.testID}
-      onMouseEnter={() => { if (timeout !== undefined) clearTimeout(timeout); change(true); }}
+    <Button accessibilityLabel={p.label} onPress={press} testID={p.testID} disabled={p.disabled}
+      onMouseEnter={() => { if (p.disabled) return; if (timeout !== undefined) clearTimeout(timeout); change(true); }}
       onMouseMove={magnet} onMouseLeave={() => { held.set(false); change(false); }}
       onPressDown={() => { held.set(true); resizing(); }} onPressUp={() => { held.set(false); resizing(); }}
       onLayout={({ bounds }) => size.set(bounds.size.width)}
-      class="focus-visible:outline-2" focusVisibleStyle={{ outlineColor: p.ink.accent, outlineWidth: 2, outlineOffset: 3 }}
+      class="focus-visible:outline-2 disabled:opacity-50" focusVisibleStyle={{ outlineColor: p.ink.accent, outlineWidth: 2, outlineOffset: 3 }}
       style={{
         minHeight: 40, flexDirection: "row", alignItems: "center", justifyContent: "center", paddingHorizontal: 17,
         gap: 9, borderRadius: 32, borderWidth: 1, borderColor: active() ? p.ink.accent : p.ink.border,
@@ -125,15 +136,15 @@ export function MotionButton(p: { entry: Entry; label: string; ink: Ink; onPress
           transform: [{ translateX: effect === "slide-arrow" ? firstShift : 0 },
             { translateY: effect === "shake" ? y : 0 }, { rotate: angle }, { scale: both ? oldScale : pulse }],
         }}>
-          <Glyph name={first} color={active() && (effect === "pulse" || effect === "shake") ? p.entry.ink ?? p.ink.accent : p.ink.text} fill={active() && effect === "pulse"} />
+          <Glyph name={first} color={active() && (effect === "pulse" || effect === "shake") ? p.effectColor ?? p.ink.accent : p.ink.text} fill={active() && effect === "pulse"} />
         </View>
         <If when={both}><View style={{
           ...drawer, opacity: newOpacity,
           transform: [{ translateX: effect === "slide-arrow" ? secondShift : 0 }, { rotate: effect === "ring" ? roll : 0 }, { scale: newScale }],
         }}>
-          <Glyph name={second} color={p.entry.ink ?? p.ink.accent} fill={effect === "color-morph"} />
+          <Glyph name={second} color={p.effectColor ?? p.ink.accent} fill={effect === "color-morph"} />
           <If when={effect === "ring" || effect === "sparkle"}>
-            <View style={{ position: "absolute", top: -3, right: -3, width: 5, height: 5, borderRadius: 4, backgroundColor: p.entry.ink ?? p.ink.accent }} />
+            <View style={{ position: "absolute", top: -3, right: -3, width: 5, height: 5, borderRadius: 4, backgroundColor: p.effectColor ?? p.ink.accent }} />
           </If>
         </View></If>
       </View>

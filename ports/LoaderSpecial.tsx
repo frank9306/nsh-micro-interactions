@@ -8,7 +8,8 @@ const tau = Math.PI * 2;
 const cycle = (time: number, duration: number) => (time % duration) / duration;
 
 export function LoaderSpecial(p: { id: string; label: string; ink: Ink; language: Language }) {
-  return <MotionStage label={p.label} ink={p.ink} language={p.language}>{elapsed => {
+  return <MotionStage label={p.label} ink={p.ink} language={p.language}
+    reducedPreview={{ time: 850, status: p.language === "zh" ? "正在加载…" : "Loading…" }}>{elapsed => {
     if (p.id === "intersecting-rings") return <View style={{ width: 120, height: 96, alignItems: "center", justifyContent: "center" }}>
       {[1, 2].map(i => <View style={{
         position: "absolute", width: 44, height: 44, borderRadius: 24, borderWidth: 3, borderColor: i === 1 ? p.ink.accent : p.ink.muted,

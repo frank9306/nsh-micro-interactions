@@ -12,3 +12,17 @@ This project ports the public Amicro component examples into NSH 0.6 TSX. GitHub
 ## Acceptance
 
 GitHub Pages must serve the project base path and the relative runtime assets. Check both languages, mobile overflow, switching categories, clearing search, keyboard activation, and reduced motion in the actual compiled Web target. Check representative shared controls in the gallery and in their original demos. Use `nsh check`, `nsh test --target web`, and a browser smoke test on the deployed Pages URL.
+
+## Reusable micro-interactions: first delivery
+
+1. Publish a source entry at `index.ts` for three components and the shared palette. Keep the 380 upstream variants in the gallery. Projects use their base library (such as hero-nsh) for forms, dialogs, notifications and tables. This project owns the motion and presentation for its reusable controls.
+2. Connect the exported components to existing gallery previews. Add bilingual examples with a copy action, a source bundle script, a usage guide and a changelog. Verify the bundle in an NSH project outside the gallery.
+3. Verify type checking and Web behavior, including keyboard selection, disabled actions, empty/replaced chart data, focus, narrow layouts and reduced motion. Build both localized Web entries for local smoke testing.
+
+| Owner | Public contract and behavior |
+| --- | --- |
+| `ports/ButtonMotion.tsx` | `AnimatedButton` accepts label, palette, effect and icon options, disabled, and an action callback. The caller supplies business state. The port owns the transient visual state and clears its timer on unmount. Existing `MotionButton` adapts catalog metadata at the gallery boundary. |
+| `ports/MotionSelect.tsx` | `MotionSelect` accepts a label, placeholder, readonly value/label options, a controlled value and a callback. It displays the placeholder for missing selections and disables empty menus. NSH owns keyboard and popup focus behavior. |
+| `ports/SeriesChart.tsx` | `SeriesChart` accepts labeled finite samples, a chart label, an empty message and a palette. It renders a responsive line and a text representation of the same values. Empty or fully invalid input shows the empty message. Input replacement redraws without caller coordination. |
+
+Components depend on NSH and the shared local palette and icons. They do not depend on the gallery, inventory, or translations. `components.test.tsx` drives a small consumer via the public entry. `scripts/bundle-components.ps1` packages that entry and its source dependencies with licenses. The gallery owns translations, demo data and clipboard feedback.

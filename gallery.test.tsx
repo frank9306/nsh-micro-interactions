@@ -57,3 +57,22 @@ test("cart morph and AI prompt previews preserve live state", async () => {
   await app.press("label:Stop");
   await app.waitFor("Stopped");
 });
+
+test("the chart preview exposes a reusable example at mobile width", async () => {
+  const app = await open("./App.tsx");
+  await app.setViewport(390, 844);
+  await app.type("label:Search components", "mono-rounded-line");
+  await app.press("label:View usage");
+  await app.waitFor("Orders example");
+  expect(app.shows("Mon: 34")).toBe(true);
+  expect(app.shows("label:Copy code")).toBe(true);
+  await app.press("label:Hide usage");
+  expect(app.shows("Orders example")).toBe(false);
+});
+
+test("Chinese usage examples localize the code users copy", async () => {
+  const app = await open("./App.zh.tsx");
+  await app.type("label:搜索组件", "mono-rounded-line");
+  await app.press("label:查看用法");
+  expect(app.texts().some(text => text.includes('label="订单" emptyLabel="暂无数据"'))).toBe(true);
+});
